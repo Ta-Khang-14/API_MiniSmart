@@ -29,7 +29,6 @@ const UserSchema = new Schema({
         type: String,
         required: true,
         trim: true,
-        match: /^[a-zA-Z0-9]{4,}$/,
     },
     role: {
         type: String,

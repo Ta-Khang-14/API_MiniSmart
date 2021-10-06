@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const redisClient = require("../config/redis");
 const ErrorResponse = require("./ErrorResponse");
 
-const generateRefreshToken = (userId) => {
+const generateRefreshToken = (userId, next) => {
     // create refreshToken
     const refreshToken = jwt.sign(
         { userId: userId },
@@ -15,10 +15,10 @@ const generateRefreshToken = (userId) => {
 
     // save refreshToken
     redisClient.set(userId.toString(), refreshToken, (err) => {
-        if (!err) {
-            console.log("Stored refreshToken");
+        if (err) {
+            return next(new ErrorResponse(err.message, 400));
         }
-        return next(new ErrorResponse(err.message, 500));
+        console.log("Stored refreshToken");
     });
 
     return refreshToken;

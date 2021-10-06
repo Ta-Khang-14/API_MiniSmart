@@ -41,7 +41,7 @@ const register = asyncHandle(async (req, res, next) => {
         { userId: newUser._id },
         process.env.ACCESS_TOKEN_SECRET
     );
-    const refreshToken = generateRefreshToken(newUser._id);
+    const refreshToken = generateRefreshToken(newUser._id, next);
 
     sendResponse(res, "Create new user successfully", {
         refreshToken,
@@ -49,4 +49,37 @@ const register = asyncHandle(async (req, res, next) => {
     });
 });
 
-module.exports = { register };
+const login = asyncHandle(async (req, res, next) => {
+    const { email, password } = req.body;
+
+    // simple validate
+    if (!email || !password) {
+        return next(new ErrorResponse("Missing information", 400));
+    }
+
+    // check email
+    const matchUser = await User.findOne({ email });
+    if (!matchUser) {
+        return next(new ErrorResponse("Invalid email or password"), 400);
+    }
+
+    // check password
+    const result = await bcrypt.compare(password, matchUser.password);
+    if (!result) {
+        return next(new ErrorResponse("Invalid email or password"), 400);
+    }
+
+    // all good
+    const accessToken = jwt.sign(
+        { userId: matchUser._id },
+        process.env.ACCESS_TOKEN_SECRET
+    );
+    const refreshToken = generateRefreshToken(matchUser._id, next);
+
+    sendResponse(res, "Login successfully", {
+        refreshToken,
+        accessToken,
+    });
+});
+
+module.exports = { register, login };
