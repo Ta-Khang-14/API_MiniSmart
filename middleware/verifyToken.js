@@ -37,7 +37,7 @@ const verifyRefreshToken = (req, res, next) => {
         // verify refresh token
         const decodeToken = jwt.verify(
             refreshToken,
-            process.env.ACCESS_TOKEN_SECRET
+            process.env.REFRESH_TOKEN_SECRET
         );
         const userId = decodeToken.userId;
 
@@ -71,9 +71,10 @@ const verifyRefreshToken = (req, res, next) => {
                 next();
             }
         );
-    } catch {
+    } catch (err) {
+        console.log(err.message);
         return next(
-            new ErrorResponse("Access token invalid or has expired", 401)
+            new ErrorResponse("Refresh token invalid or has expired", 401)
         );
     }
 };

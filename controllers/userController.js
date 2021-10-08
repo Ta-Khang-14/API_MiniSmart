@@ -9,6 +9,9 @@ const sendResponse = require("../helpers/sendResponse");
 const { findByIdAndUpdate } = require("../models/User");
 const saltRounds = 10;
 
+// @route [POST] /api/auth/register
+// @desc user register
+// @access Public
 const register = asyncHandle(async (req, res, next) => {
     const { name, surname, phone = "", email, password } = req.body;
 
@@ -49,7 +52,9 @@ const register = asyncHandle(async (req, res, next) => {
         accessToken,
     });
 });
-
+// @route [POST] /api/auth/login
+// @desc user login
+// @access Public
 const login = asyncHandle(async (req, res, next) => {
     const { email, password } = req.body;
 
@@ -82,6 +87,9 @@ const login = asyncHandle(async (req, res, next) => {
         accessToken,
     });
 });
+// @route [PUT] /api/auth/change-password
+// @desc user change password
+// @access private
 const changePassword = asyncHandle(async (req, res, next) => {
     const { password, newPassword, confirmNewPassword } = req.body;
     const userId = req.userId;
@@ -122,4 +130,72 @@ const changePassword = asyncHandle(async (req, res, next) => {
 
     sendResponse(res, "Change password successfully");
 });
-module.exports = { register, login, changePassword };
+// @route [PUT] /api/auth/
+// @desc user update infor
+// @access private
+const updateInfor = asyncHandle(async (req, res, next) => {
+    const updateInfomation = { ...req.body };
+    const userId = req.userId;
+
+    // validate infor
+    Object.keys(updateInfomation).forEach((key) => {
+        if (!updateInfomation[key]) {
+            delete updateInfomation[key];
+        }
+    });
+
+    // check user
+    const matchUser = await User.findById(userId).select("-password");
+    if (!matchUser) {
+        return next(new ErrorResponse("User not found", 404));
+    }
+
+    //check email
+    if (updateInfomation.email && updateInfomation.email !== matchUser.email) {
+        const existEmail = await User.findOne({
+            email: updateInfomation.email,
+        });
+
+        if (existEmail) {
+            return next(new ErrorResponse("Email already exists"));
+        }
+    }
+
+    // all good
+    Object.keys(updateInfomation).forEach((key) => {
+        matchUser[key] = updateInfomation[key];
+    });
+    await matchUser.save();
+
+    console.log(matchUser);
+    sendResponse(res, "Update informtion successfully", matchUser);
+});
+// @route [POST] /api/auth/access-token
+// @desc user update infor
+// @access private
+const getAccessToken = asyncHandle(async (req, res, next) => {
+    const userId = req.userId;
+
+    // check user
+    const matchUser = await User.findById(userId);
+    if (!matchUser) {
+        return next(new ErrorResponse("User not found", 404));
+    }
+
+    // generate access token
+    const accessToken = jwt.sign(
+        { userId: matchUser._id, role: matchUser.role },
+        process.env.ACCESS_TOKEN_SECRET
+    );
+
+    // all good
+    sendResponse(res, "Create new access token successfully", { accessToken });
+});
+
+module.exports = {
+    register,
+    login,
+    changePassword,
+    updateInfor,
+    getAccessToken,
+};
