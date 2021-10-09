@@ -79,4 +79,27 @@ const verifyRefreshToken = (req, res, next) => {
     }
 };
 
-module.exports = { verifyAcessToken, verifyRefreshToken };
+const verifyResetToken = (req, res, next) => {
+    const { resetCode } = req.body;
+
+    //validate reset code
+    if (!resetCode) {
+        return next(new ErrorResponse("Missing information", 400));
+    }
+
+    // check reset code
+    redisClient.get(resetCode.toString(), (err, redisUserId) => {
+        if (err) {
+            return next(new ErrorResponse(err.message, 500));
+        }
+        if (!redisUserId) {
+            return next(
+                new ErrorResponse("Reset code not found or has expired", 404)
+            );
+        }
+
+        req.userId = redisUserId;
+        next();
+    });
+};
+module.exports = { verifyAcessToken, verifyRefreshToken, verifyResetToken };

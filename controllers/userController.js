@@ -1,11 +1,13 @@
 const asyncHandle = require("../middleware/asynHandle");
 const bcrypt = require("bcrypt");
 const generateRefreshToken = require("../helpers/generateRefreshToken");
+const generateResetCode = require("../helpers/generateResetCode");
 const ErrorResponse = require("../helpers/ErrorResponse");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const redisClient = require("../config/redis");
 const sendResponse = require("../helpers/sendResponse");
+const sendUesrMail = require("../helpers/sendMail");
 const { findByIdAndUpdate } = require("../models/User");
 const saltRounds = 10;
 
@@ -191,11 +193,79 @@ const getAccessToken = asyncHandle(async (req, res, next) => {
     // all good
     sendResponse(res, "Create new access token successfully", { accessToken });
 });
+// @route [POST] /api/auth/forget-password
+// @desc user forget password
+// @access public
+const forgetPassword = asyncHandle(async (req, res, next) => {
+    const { email } = req.body;
 
+    //validate email
+    if (!email) {
+        return next(new ErrorResponse("Missing information!", 400));
+    }
+
+    // chech user
+    const matchUser = await User.findOne({ email });
+    if (!matchUser) {
+        return next(new ErrorResponse("User not found", 404));
+    }
+
+    //generate reset code
+    const resetCode = generateResetCode(matchUser._id, next);
+
+    // all good
+    const options = {
+        email,
+        subject: "Quên mật khẩu",
+        message: `Mã của bạn: ${resetCode}. Mã tồn tại trong 15 phút.`,
+    };
+
+    sendUesrMail(options);
+    sendResponse(res, "Send mail successfully");
+});
+// @route [POST] /api/auth/reset-password
+// @desc user reset password
+// @access public
+const resetPassword = asyncHandle(async (req, res, next) => {
+    const { resetPassword, confirmResetPassword } = req.body;
+    const userId = req.userId;
+    console.log(userId);
+
+    // validate resetPassword && confirmResetPassword
+    if (!resetPassword || !confirmResetPassword) {
+        return next(new ErrorResponse("Missing information", 400));
+    }
+    if (resetPassword !== confirmResetPassword) {
+        return next(
+            new ErrorResponse(
+                "Reset password not match with confirm password",
+                400
+            )
+        );
+    }
+
+    // check user
+    const matchUser = await User.findById(userId);
+    if (!matchUser) {
+        return next(new ErrorResponse("User not found", 404));
+    }
+
+    // hashpassword
+    const hashPassword = await bcrypt.hash(resetPassword, saltRounds);
+
+    //reset password
+    matchUser.password = hashPassword;
+    await matchUser.save();
+
+    //all good
+    sendResponse(res, "Reset password successfully");
+});
 module.exports = {
     register,
     login,
     changePassword,
     updateInfor,
     getAccessToken,
+    forgetPassword,
+    resetPassword,
 };
