@@ -12,6 +12,6 @@ User
 - Truy cập: Công khai
 - Nhận dữ liệu: form-data { name , surname , phone , email , password }
 # [POST] api/auth/login
-- Mô tả: Người dùng đăng kí
+- Mô tả: Người dùng đăng nhập
 - Truy cập: Công khai
 - Nhận dữ liệu: form-data { email , password }
