@@ -8,10 +8,10 @@ User
 - password: String (Bắt buộc)
 # Auth API
 # [POST] api/auth/register
-Mô tả: Người dùng đăng kí
-Truy cập: Công khai
-Nhận dữ liệu: form-data { name , surname , phone , email , password }
+- Mô tả: Người dùng đăng kí
+- Truy cập: Công khai
+- Nhận dữ liệu: form-data { name , surname , phone , email , password }
 # [POST] api/auth/login
-Mô tả: Người dùng đăng kí
-Truy cập: Công khai
-Nhận dữ liệu: form-data { email , password }
+- Mô tả: Người dùng đăng kí
+- Truy cập: Công khai
+- Nhận dữ liệu: form-data { email , password }
