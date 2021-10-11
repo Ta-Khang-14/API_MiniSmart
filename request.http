@@ -1,0 +1,3 @@
+###
+POST https://apiminismart-production.up.railway.app/api/auth/register/
+Content-Type: application/json
