@@ -38,7 +38,7 @@ const register = asyncHandle(async (req, res, next) => {
         phone,
         email,
         password: hashPassword,
-        role: "user",
+        isActive: true,
     });
     await newUser.save();
 
@@ -71,6 +71,11 @@ const login = asyncHandle(async (req, res, next) => {
         return next(new ErrorResponse("Invalid email or password"), 400);
     }
 
+    // check active account
+    if (!matchUser.isActive) {
+        return next(new ErrorResponse("User not active", 400));
+    }
+
     // check password
     const result = await bcrypt.compare(password, matchUser.password);
     if (!result) {
@@ -88,6 +93,29 @@ const login = asyncHandle(async (req, res, next) => {
         refreshToken,
         accessToken,
     });
+});
+// @route [GET] /api/auth/confirm/:id
+// @desc user confirm email
+// @access private
+const confirmEmail = asyncHandle(async (req, res, next) => {
+    const userId = req.params.id;
+
+    // validate id
+    if (!userId) {
+        return next(new ErrorResponse("Invalid id", 400));
+    }
+
+    // check user
+    const matchUer = await User.findById(userId);
+    if (!matchUer) {
+        return next(new ErrorResponse("User not found", 404));
+    }
+
+    // all good
+    matchUer.isActive = true;
+    await matchUer.save();
+
+    sendResponse(res, "Active account successfully");
 });
 // @route [PUT] /api/auth/change-password
 // @desc user change password
@@ -268,4 +296,5 @@ module.exports = {
     getAccessToken,
     forgetPassword,
     resetPassword,
+    confirmEmail,
 };

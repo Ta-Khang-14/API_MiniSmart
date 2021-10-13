@@ -14,7 +14,10 @@ const {
     getAccessToken,
     forgetPassword,
     resetPassword,
+    confirmEmail,
 } = require("../controllers/userController");
+
+router.get("/confirm/:id", confirmEmail);
 
 router.put("/change-password", verifyAcessToken, changePassword);
 router.post("/access-token", verifyRefreshToken, getAccessToken);
