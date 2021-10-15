@@ -4,7 +4,7 @@ const ObjectId = Schema.ObjectId;
 
 const ProductScheme = new Schema(
     {
-        name: {
+        title: {
             type: String,
             required: true,
             unique: true,
