@@ -85,7 +85,15 @@ const updatePostById = asyncHandle(async (req, res, next) => {
     if (!id) {
         return next(new ErrorResponse("Id not found", 404));
     }
+    // validate title
+    if (updateInformation["title"]) {
+        const matchPost = await Post.findOne({ title });
+        if (matchPost) {
+            return next(new ErrorResponse("Title has taken", 400));
+        }
+    }
 
+    // check post
     const updatedPost = await Post.findByIdAndUpdate(id, updateInformation);
 
     if (!updatedPost) {

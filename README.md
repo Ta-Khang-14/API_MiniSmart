@@ -71,7 +71,7 @@ Post
 
 -   Mô tả: Xác thực mã + đổi mật khẩu
 -   Truy cập: Công khai
--   Nhận dữ liệu: { email }
+-   Nhận dữ liệu: { resetCode, resetPassword, confirmResetPassword }
 -   Quyền: ['user', 'admin']
 
 # Category API
@@ -91,3 +91,38 @@ Post
 -   Quyền: Tất cả
 
 # Post API
+
+# [POST] api/posts/
+
+-   Mô tả: Thêm mới bài viết
+-   Truy cập: Cá nhân
+-   Nhận dữ liệu: { title, description, pictures }
+-   Quyền: ['user','admin']
+
+# [GET] api/posts/
+
+-   Mô tả: Lấy danh sách bài viết
+-   Truy cập: Công khai
+-   Nhận dữ liệu: Không
+-   Quyền: Tất cả
+
+# [GET] api/posts/:id
+
+-   Mô tả: Lấy danh sách bài viết theo id
+-   Truy cập: Công khai
+-   Nhận dữ liệu: Không
+-   Quyền: Tất cả
+
+# [PUT] api/posts/
+
+-   Mô tả: Chỉnh sửa bài viết
+-   Truy cập: Cá nhân
+-   Nhận dữ liệu: { title, description, pictures }
+-   Quyền: ['user','admin']
+
+# [DELETE] api/posts/:id
+
+-   Mô tả: Xóa sửa bài viết
+-   Truy cập: Cá nhân
+-   Nhận dữ liệu: Không
+-   Quyền: ['user','admin']
