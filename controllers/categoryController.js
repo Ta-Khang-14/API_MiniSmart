@@ -8,6 +8,9 @@ const sendResponse = require("../helpers/sendResponse");
 // @access public
 const getCategories = asyncHandle(async (req, res, next) => {
     const categories = await Category.find();
+    if (!categories) {
+        next(new ErrorResponse("Categories not found", 404));
+    }
     sendResponse(res, "Get categories successfully", { categories });
 });
 

@@ -16,7 +16,7 @@ const ProductScheme = new Schema(
             unique: true,
             trim: true,
         },
-        picture: [
+        pictures: [
             {
                 type: String,
                 trim: true,
@@ -48,7 +48,7 @@ const ProductScheme = new Schema(
             type: String,
             trim: true,
         },
-        postBy: {
+        postedBy: {
             type: Schema.Types.ObjectId,
             ref: "users",
         },
