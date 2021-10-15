@@ -52,12 +52,13 @@ const ProductScheme = new Schema(
             type: Schema.Types.ObjectId,
             ref: "users",
         },
-        updateBy: [
+        updatedBy: [
             {
                 type: Schema.Types.ObjectId,
                 ref: "users",
             },
         ],
+        updatedAt: [{ type: Date }],
         category: {
             type: Schema.Types.ObjectId,
             ref: "categories",
