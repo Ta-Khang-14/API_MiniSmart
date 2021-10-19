@@ -33,6 +33,7 @@ const ProductScheme = new Schema(
         },
         quantity: {
             type: Number,
+            required: true,
             default: 0,
         },
         sellNumber: {
@@ -58,7 +59,7 @@ const ProductScheme = new Schema(
                 ref: "users",
             },
         ],
-        updatedAt: [{ type: Date }],
+        updatedDairy: [{ type: Date }],
         category: {
             type: Schema.Types.ObjectId,
             ref: "categories",

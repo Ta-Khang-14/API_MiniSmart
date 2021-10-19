@@ -41,6 +41,12 @@ const UserSchema = new Schema(
             enum: [true, false],
             default: false,
         },
+        favoriteProducts: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "products",
+            },
+        ],
     },
     {
         timestamps: true,

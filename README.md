@@ -9,6 +9,9 @@ User
 -   phone: String (Trên 9 kí tự chỉ gồm 0-9, Không bắt buộc)
 -   email: String (Bắt buộc)
 -   password: String (Bắt buộc)
+-   role: ["user", "Admin"]
+-   isActive: Boolean
+-   favoriteProducts: Array
 
 Category
 
@@ -126,3 +129,36 @@ Post
 -   Truy cập: Cá nhân
 -   Nhận dữ liệu: Không
 -   Quyền: ['user','admin']
+
+# Products API
+
+# [POST] api/products/
+
+-   Mô tả: Tạo 1 sản phẩm mới
+-   Truy cập: Cá nhân
+-   Nhận dữ liệu: {
+    title,
+    description,
+    pictures,
+    price,
+    discount,
+    quantity,
+    country,
+    unit,
+    category,
+    }
+-   Quyền: ["admin"]
+
+# [GET] api/products/
+
+-   Mô tả: Lấy danh sách sản phẩm
+-   Truy cập: Công khai
+-   Nhận dữ liệu: Không
+-   Quyền: Tất cả
+
+# [GET] api/products/:id
+
+-   Mô tả: Lấy thông tin 1 sản phẩm bằng id
+-   Truy cập: Công khai
+-   Nhận dữ liệu: Không
+-   Quyền: Tất cả
