@@ -47,6 +47,12 @@ const UserSchema = new Schema(
                 ref: "products",
             },
         ],
+        deliveryAddress: [
+            {
+                type: String,
+                trim: true,
+            },
+        ],
     },
     {
         timestamps: true,

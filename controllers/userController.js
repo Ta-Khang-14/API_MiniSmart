@@ -1,5 +1,6 @@
 const asyncHandle = require("../middleware/asynHandle");
 const bcrypt = require("bcrypt");
+const Cart = require("../models/Cart");
 const generateRefreshToken = require("../helpers/generateRefreshToken");
 const generateResetCode = require("../helpers/generateResetCode");
 const ErrorResponse = require("../helpers/ErrorResponse");
@@ -8,7 +9,6 @@ const jwt = require("jsonwebtoken");
 const redisClient = require("../config/redis");
 const sendResponse = require("../helpers/sendResponse");
 const sendUesrMail = require("../helpers/sendMail");
-const { findByIdAndUpdate } = require("../models/User");
 const saltRounds = 10;
 
 // @route [POST] /api/auth/register
@@ -38,21 +38,18 @@ const register = asyncHandle(async (req, res, next) => {
         phone,
         email,
         password: hashPassword,
-        isActive: true,
     });
     await newUser.save();
 
-    // create token
-    const accessToken = jwt.sign(
-        { userId: newUser._id, role: newUser.role },
-        process.env.ACCESS_TOKEN_SECRET
-    );
-    const refreshToken = generateRefreshToken(newUser._id, next);
-
-    sendResponse(res, "Create new user successfully", {
-        refreshToken,
-        accessToken,
-    });
+    // send mail
+    const options = {
+        email,
+        subject: "Kích hoạt tài khoản!",
+        message: "Kích vào đường link sau để kích hoạt tài khoản của bạn: ",
+        link: process.env.CLIENT_URL + "/api/auth/confirm/" + newUser._id,
+    };
+    sendUesrMail(res, options);
+    sendResponse(res, "Send active mail successfully", {});
 });
 // @route [POST] /api/auth/login
 // @desc user login
@@ -85,7 +82,8 @@ const login = asyncHandle(async (req, res, next) => {
     // all good
     const accessToken = jwt.sign(
         { userId: matchUser._id, role: matchUser.role },
-        process.env.ACCESS_TOKEN_SECRET
+        process.env.ACCESS_TOKEN_SECRET,
+        { expiresIn: process.env.ACCESS_TOKEN_EXPIRE }
     );
     const refreshToken = generateRefreshToken(matchUser._id, next);
 
@@ -111,9 +109,16 @@ const confirmEmail = asyncHandle(async (req, res, next) => {
         return next(new ErrorResponse("User not found", 404));
     }
 
+    // check active
+    if (matchUer.isActive) {
+        return next(new ErrorResponse("User was active", 400));
+    }
     // all good
     matchUer.isActive = true;
-    await matchUer.save();
+    const newCart = new Cart({
+        user: matchUer._id,
+    });
+    await [matchUer.save(), newCart.save()];
 
     sendResponse(res, "Active account successfully");
 });
@@ -164,7 +169,8 @@ const changePassword = asyncHandle(async (req, res, next) => {
 // @desc user update infor
 // @access private
 const updateInfor = asyncHandle(async (req, res, next) => {
-    const updateInfomation = { ...req.body };
+    const { name, surname, email, phone } = req.body;
+    const updateInfomation = { name, surname, email, phone };
     const userId = req.userId;
 
     // validate infor
@@ -198,7 +204,7 @@ const updateInfor = asyncHandle(async (req, res, next) => {
     await matchUser.save();
 
     console.log(matchUser);
-    sendResponse(res, "Update informtion successfully", matchUser);
+    sendResponse(res, "Update informtion successfully", { user: matchUser });
 });
 // @route [POST] /api/auth/access-token
 // @desc user update infor
@@ -248,7 +254,7 @@ const forgetPassword = asyncHandle(async (req, res, next) => {
         message: `Mã của bạn: ${resetCode}. Mã tồn tại trong 15 phút.`,
     };
 
-    sendUesrMail(options);
+    sendUesrMail(res, options);
     sendResponse(res, "Send mail successfully");
 });
 // @route [POST] /api/auth/reset-password

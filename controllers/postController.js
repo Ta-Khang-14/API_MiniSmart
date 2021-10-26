@@ -73,7 +73,12 @@ const getPostById = asyncHandle(async (req, res, next) => {
 // @desc update posts by id
 // @access private
 const updatePostById = asyncHandle(async (req, res, next) => {
-    const updateInformation = { ...req.body };
+    const { title, description, pictures } = req.body;
+    const updateInformation = {
+        title,
+        description,
+        pictures,
+    };
     const id = req.params.id;
 
     // validate update info
@@ -87,14 +92,18 @@ const updatePostById = asyncHandle(async (req, res, next) => {
     }
     // validate title
     if (updateInformation["title"]) {
-        const matchPost = await Post.findOne({ title });
+        const matchPost = await Post.findOne({
+            title: updateInformation["title"],
+        });
         if (matchPost) {
             return next(new ErrorResponse("Title has taken", 400));
         }
     }
 
     // check post
-    const updatedPost = await Post.findByIdAndUpdate(id, updateInformation);
+    const updatedPost = await Post.findByIdAndUpdate(id, updateInformation, {
+        new: true,
+    });
 
     if (!updatedPost) {
         return next(new ErrorResponse("Post not found"));

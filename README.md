@@ -28,8 +28,6 @@ Product
 -   sellNumber: Number
 -   unit: String
 -   postedBy: String(Tham chiếu đến users)
--   updatedBy: Array
--   updatedAt: Array
 -   category: String (Tham chiếu đến categories)
 
 Post
@@ -47,6 +45,13 @@ Post
 -   Mô tả: Người dùng đăng kí
 -   Truy cập: Công khai
 -   Nhận dữ liệu: { name , surname , phone , email , password }
+-   Quyền: Tất cả
+
+# [GET] /api/auth/confirm/:id
+
+-   Mô tả: Người dùng kích hoạt tài khoản
+-   Truy cập: Công khai
+-   Nhận dữ liệu: Không
 -   Quyền: Tất cả
 
 # [POST] api/auth/login/
@@ -149,6 +154,23 @@ Post
     }
 -   Quyền: ["admin"]
 
+# [PUT] api/products/:id
+
+-   Mô tả: Update 1 sản phẩm với Id
+-   Truy cập: Cá nhân
+-   Nhận dữ liệu: {
+    title,
+    description,
+    pictures,
+    price,
+    discount,
+    quantity,
+    country,
+    unit,
+    category,
+    }
+-   Quyền: ["admin"]
+
 # [GET] api/products/
 
 -   Mô tả: Lấy danh sách sản phẩm
@@ -162,3 +184,19 @@ Post
 -   Truy cập: Công khai
 -   Nhận dữ liệu: Không
 -   Quyền: Tất cả
+
+# [DELETE] api/products/:id
+
+-   Mô tả: Xóa 1 sản phẩm bằng id
+-   Truy cập: Công khai
+-   Nhận dữ liệu: Không
+-   Quyền: ["admin"]
+
+# [DELETE] api/products/
+
+-   Mô tả: Xóa nhiều sản phẩm bằng id
+-   Truy cập: Công khai
+-   Nhận dữ liệu: {
+    productIds: []
+    }
+-   Quyền: ["admin"]

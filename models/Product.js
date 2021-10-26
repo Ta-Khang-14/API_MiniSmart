@@ -20,6 +20,7 @@ const ProductScheme = new Schema(
             {
                 type: String,
                 trim: true,
+                default: [],
             },
         ],
         price: {
@@ -53,13 +54,6 @@ const ProductScheme = new Schema(
             type: Schema.Types.ObjectId,
             ref: "users",
         },
-        updatedBy: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: "users",
-            },
-        ],
-        updatedDairy: [{ type: Date }],
         category: {
             type: Schema.Types.ObjectId,
             ref: "categories",
