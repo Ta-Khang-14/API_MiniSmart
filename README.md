@@ -2,7 +2,7 @@
 
 # Models
 
-User
+User - Người dùng
 
 -   name: String (Trên 2 kí tự chỉ gồm A-Z và a-z, Bắt buộc)
 -   surname: String (Trên 2 kí tự chỉ gồm A-Z và a-z, Bắt buộc)
@@ -13,11 +13,11 @@ User
 -   isActive: Boolean
 -   favoriteProducts: Array
 
-Category
+Category - Danh mục sản phẩm
 
 -   name: String (Bắt buộc)
 
-Product
+Product - Sản phẩm
 
 -   title: String (Bắt buộc)
 -   description: String (Bắt buộc)
@@ -30,13 +30,22 @@ Product
 -   postedBy: String(Tham chiếu đến users)
 -   category: String (Tham chiếu đến categories)
 
-Post
+Post - Bài viết
 
 -   title: String (Bắt buộc)
 -   description: String (Bắt buộc)
--   picture: Array
+-   pictures: Array
 -   postedBy: String(Tham chiếu đến users)
 -   postedAt: Date
+
+Diary - Nhật kí cập nhật sản phẩm
+
+-   productId: String
+-   nameProduct: String
+-   updatedBy: Array
+-   updatedAt: Array
+-   message: Array
+-   isDeleted: Boolean
 
 # Auth API
 

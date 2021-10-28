@@ -10,10 +10,10 @@ const { updateInfor } = require("./userController");
 // @access private
 const createProduct = asyncHandle(async (req, res, next) => {
     const userId = req.userId;
+    const pictures = req.pictures;
     const {
         title,
         description,
-        pictures,
         price,
         discount,
         quantity,
@@ -167,12 +167,14 @@ const updateProductById = asyncHandle(async (req, res, next) => {
         return next(new ErrorResponse("Diary not found", 404));
     }
     // update dairy & procuct
-    let message = "";
+    let message = [];
 
     Object.keys(updateInfor).forEach((key) => {
-        message += `+ ${key.toUpperCase()}: ${matchProduct[key]} -> ${
-            updateInfor[key]
-        }\n`;
+        message.push(
+            `+ ${key.toUpperCase()}: ${matchProduct[key]} -> ${
+                updateInfor[key]
+            }`
+        );
         matchProduct[key] = updateInfor[key];
     });
 

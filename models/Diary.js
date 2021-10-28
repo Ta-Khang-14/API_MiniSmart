@@ -23,7 +23,7 @@ const DiarySchema = new Schema({
     ],
     message: [
         {
-            type: String,
+            type: Array,
         },
     ],
     isDeleted: {

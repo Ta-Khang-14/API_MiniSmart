@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+
 const { checkAdminPermission } = require("../middleware/checkPermission");
 const {
     createProduct,
@@ -11,6 +12,11 @@ const {
 } = require("../controllers/productController");
 const { verifyAcessToken } = require("../middleware/verifyToken");
 
+const multer = require("multer");
+const storage = require("../helpers/cloudinaryStorage");
+const uploadCloud = multer({ storage: storage("Product") });
+const uploadFile = require("../middleware/uploadFile");
+
 router.put("/:id", verifyAcessToken, checkAdminPermission, updateProductById);
 router.delete(
     "/:id",
@@ -19,7 +25,14 @@ router.delete(
     deleteProductById
 );
 router.delete("/", verifyAcessToken, checkAdminPermission, deleteProducts);
-router.post("/", verifyAcessToken, checkAdminPermission, createProduct);
+router.post(
+    "/",
+    // verifyAcessToken,
+    // checkAdminPermission,
+    uploadCloud.array("pictures", 10),
+    uploadFile,
+    createProduct
+);
 router.get("/:id", getProductById);
 router.get("/", getProducts);
 
