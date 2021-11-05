@@ -113,12 +113,14 @@ const confirmEmail = asyncHandle(async (req, res, next) => {
     if (matchUer.isActive) {
         return next(new ErrorResponse("User was active", 400));
     }
+
     // all good
     matchUer.isActive = true;
     const newCart = new Cart({
         user: matchUer._id,
     });
-    await [matchUer.save(), newCart.save()];
+    await matchUer.save();
+    await newCart.save();
 
     sendResponse(res, "Active account successfully");
 });

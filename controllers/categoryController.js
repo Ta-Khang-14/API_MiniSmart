@@ -33,6 +33,9 @@ const createCategory = asyncHandle(async (req, res, next) => {
     await newCategory.save();
     sendResponse(res, "Create new category successfully");
 });
+// @route [POST] /api/categories/
+// @desc create new category
+// @access private
 
 module.exports = {
     createCategory,

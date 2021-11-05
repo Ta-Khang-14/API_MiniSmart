@@ -20,6 +20,16 @@ const CartShema = new Schema(
                 default: 1,
             },
         ],
+        money: [
+            {
+                type: Number,
+                default: 0,
+            },
+        ],
+        sumMoney: {
+            type: Number,
+            default: 0,
+        },
     },
     {
         timestamps: true,

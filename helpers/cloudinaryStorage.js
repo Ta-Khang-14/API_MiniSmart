@@ -6,7 +6,7 @@ const storage = (folder) => {
         cloudinary,
         params: {
             folder: `MiniMart//${folder}`,
-            format: async (req, file) => "png",
+            allowedFormats: ["jpg", "png"],
         },
     });
 };

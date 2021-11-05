@@ -17,7 +17,14 @@ const storage = require("../helpers/cloudinaryStorage");
 const uploadCloud = multer({ storage: storage("Product") });
 const uploadFile = require("../middleware/uploadFile");
 
-router.put("/:id", verifyAcessToken, checkAdminPermission, updateProductById);
+router.put(
+    "/:id",
+    verifyAcessToken,
+    checkAdminPermission,
+    uploadCloud.array("pictures", 10),
+    uploadFile,
+    updateProductById
+);
 router.delete(
     "/:id",
     verifyAcessToken,
@@ -27,8 +34,8 @@ router.delete(
 router.delete("/", verifyAcessToken, checkAdminPermission, deleteProducts);
 router.post(
     "/",
-    // verifyAcessToken,
-    // checkAdminPermission,
+    verifyAcessToken,
+    checkAdminPermission,
     uploadCloud.array("pictures", 10),
     uploadFile,
     createProduct

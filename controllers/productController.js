@@ -109,12 +109,13 @@ const getProductById = asyncHandle(async (req, res, next) => {
 const updateProductById = asyncHandle(async (req, res, next) => {
     const userId = req.userId;
     const productId = req.params.id;
+    const newPictures = req.pictures;
     const {
         title,
         description,
-        pictures,
         price,
         discount,
+        pictures,
         quantity,
         country,
         unit,
@@ -132,6 +133,10 @@ const updateProductById = asyncHandle(async (req, res, next) => {
         unit,
         category,
     };
+    // check add new pictures
+    if (!newPictures) {
+        pictures.push(newPictures);
+    }
 
     // validate update information
     Object.keys(updateInfor).forEach((key) => {
@@ -210,6 +215,7 @@ const deleteProductById = asyncHandle(async (req, res, next) => {
     if (!result) {
         return next("Product not found", 404);
     }
+
     //update dairies
     const matchDiary = await Diary.findOneAndUpdate(
         { productId: productId },
@@ -232,6 +238,7 @@ const deleteProducts = asyncHandle(async (req, res, next) => {
     if (!userId) {
         return next(new ErrorResponse("User id not found", 404));
     }
+
     //check prduct id
     if (!productIds) {
         return next("Product Ids not found", 404);
@@ -243,6 +250,7 @@ const deleteProducts = asyncHandle(async (req, res, next) => {
     if (!result) {
         return next("Products not found", 404);
     }
+
     // update dairies
     const matchDiaries = await Diary.updateMany(
         {
