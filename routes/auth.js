@@ -28,7 +28,7 @@ router.post("/register", register);
 router.post("/login", login);
 
 router.put("/", verifyAcessToken, updateInfor);
-router.get((req, res, next) => {
+router.get("/register", (req, res, next) => {
     res.status(200).json("Auth route");
 });
 
