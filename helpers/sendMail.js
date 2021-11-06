@@ -21,7 +21,6 @@ const sendUesrMail = async (res, options) => {
 
         await transporter.sendMail(content);
     } catch (err) {
-        console.log(err.message);
         return res.status(500).json({
             message: err.message,
             success: false,

@@ -2,6 +2,8 @@ const asyncHandle = require("../middleware/asynHandle");
 const ErrorResponse = require("../helpers/ErrorResponse");
 const sendResponse = require("../helpers/sendResponse");
 const Cart = require("../models/Cart");
+const { find } = require("../models/Cart");
+const Product = require("../models/Product");
 
 // @route [GET] /api/cart/
 // @desc get user cart
@@ -25,7 +27,7 @@ const getCart = asyncHandle(async (req, res, next) => {
 });
 
 // @route [PUT] /api/cart/add
-// @desc get user cart
+// @desc add product to cart
 // @access private
 const addProduct = asyncHandle(async (req, res, next) => {
     const userId = req.userId;
@@ -40,5 +42,8 @@ const addProduct = asyncHandle(async (req, res, next) => {
     if (!productId) {
         return next(new ErrorResponse("Product ID not found", 404));
     }
+
+    // find product
+    const matchProduct = await Product.findById(productId);
 });
 module.exports = { getCart };
