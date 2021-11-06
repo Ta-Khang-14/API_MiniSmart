@@ -250,14 +250,14 @@ const forgetPassword = asyncHandle(async (req, res, next) => {
     const resetCode = generateResetCode(matchUser._id, next);
 
     // all good
-    const options = {
-        email,
-        subject: "Quên mật khẩu",
-        message: `Mã của bạn: ${resetCode}. Mã tồn tại trong 15 phút.`,
-    };
+    // const options = {
+    //     email,
+    //     subject: "Quên mật khẩu",
+    //     message: `Mã của bạn: ${resetCode}. Mã tồn tại trong 15 phút.`,
+    // };
 
-    sendUesrMail(res, options);
-    sendResponse(res, "Send mail successfully");
+    // sendUesrMail(res, options);
+    sendResponse(res, "Send mail successfully", { resetCode });
 });
 // @route [POST] /api/auth/reset-password
 // @desc user reset password

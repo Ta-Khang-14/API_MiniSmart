@@ -1,10 +1,10 @@
 ###
-POST http://localhost:3000/api/auth/register
+POST https://apiminismart-production.up.railway.app/api/auth/register
 Content-Type: application/json
 
 {
     "name": "khang",
     "surname": "takhang",
-    "email": "vietkhang104@gmail.com",
+    "email": "vietkhang1024@gmail.com",
     "password": "112233"
 }
