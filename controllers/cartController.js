@@ -21,7 +21,7 @@ const getCart = asyncHandle(async (req, res, next) => {
     if (!matchCart) {
         return next("Cart not found or User is not active", 404);
     }
-
+    console.log(matchCart.sumMoney);
     // all good
     sendResponse(res, "Get cart successfully", { cart: matchCart });
 });
@@ -33,6 +33,8 @@ const addProduct = asyncHandle(async (req, res, next) => {
     const userId = req.userId;
     const { productId, quantity = 1 } = req.body;
 
+    console.log(11111111111111);
+    console.log(req.body);
     // simple validate userID
     if (!userId) {
         return next(new ErrorResponse("User ID not found", 404));
@@ -45,5 +47,159 @@ const addProduct = asyncHandle(async (req, res, next) => {
 
     // find product
     const matchProduct = await Product.findById(productId);
+    if (!matchProduct) {
+        return next(new ErrorResponse("Product not found", 404));
+    }
+
+    // check quantity of product
+    if (matchProduct.quantity < quantity) {
+        return next(new ErrorResponse("Product's quantity is not enough", 400));
+    }
+
+    // find cart
+    const matchCart = await Cart.findOne({ user: userId });
+    if (!matchCart) {
+        return next(new ErrorResponse("User not found", 404));
+    }
+
+    // add product
+    let money =
+        +matchProduct.price - +matchProduct.price * +matchProduct.discount;
+
+    matchCart.products.push(productId);
+    matchCart.quantity.push(quantity);
+    matchCart.money.push(money);
+
+    matchCart.sumMoney =
+        matchCart.sumMoney === 0
+            ? money
+            : matchCart.money.reduce((a, b) => a + b, 0);
+
+    await matchCart.save();
+    sendResponse(res, "Add product successfully", { cart: matchCart });
 });
-module.exports = { getCart };
+// @route [PUT] /api/cart/update-product/:productId
+// @desc update product in cart
+// @access private
+const updateProductInCart = asyncHandle(async (req, res, next) => {
+    const userId = req.userId;
+    const { quantity } = req.body;
+    const productId = req.params.productId;
+
+    // simple validate userID
+    if (!userId) {
+        return next(new ErrorResponse("User ID not found", 404));
+    }
+
+    // simple validate input
+    if (!productId || !quantity) {
+        return next(new ErrorResponse("Missing information", 404));
+    }
+
+    // find product
+    const matchProduct = await Product.findById(productId);
+    if (!matchProduct) {
+        return next(new ErrorResponse("Product not found", 404));
+    }
+
+    // find cart
+    const matchCart = await Cart.findOne({ user: userId });
+    if (!matchCart) {
+        return next(new ErrorResponse("User not found", 404));
+    }
+
+    matchCart.quantity[matchCart.products.indexOf(productId)] = quantity;
+    matchCart.money[matchCart.products.indexOf(productId)] =
+        quantity * matchProduct.price;
+
+    matchCart.sumMoney = matchCart.money.reduce((a, b) => a + b, 0);
+
+    await matchCart.save();
+    sendResponse(res, "Update product in Cart successfully", {
+        cart: matchCart,
+    });
+});
+// @route [PUT] /api/cart/delete-product/:productId
+// @desc delete product from cart
+// @access private
+const deleteProductFromCartById = asyncHandle(async (req, res, next) => {
+    const userId = req.userId;
+    const productId = req.params.productId;
+
+    // simple validate userID
+    if (!userId) {
+        return next(new ErrorResponse("User ID not found", 404));
+    }
+
+    // simple validate input
+    if (!productId) {
+        return next(new ErrorResponse("Missing information", 404));
+    }
+
+    // find product
+    const matchProduct = await Product.findById(productId);
+    if (!matchProduct) {
+        return next(new ErrorResponse("Product not found", 404));
+    }
+
+    // find cart
+    const matchCart = await Cart.findOne({ user: userId });
+    if (!matchCart) {
+        return next(new ErrorResponse("User not found", 404));
+    }
+
+    let index = matchCart.products.indexOf(productId);
+
+    matchCart.products.splice(index, 1);
+    matchCart.quantity.splice(index, 1);
+    matchCart.money.splice(index, 1);
+    matchCart.sumMoney = matchCart.money.reduce((a, b) => a + b, 0);
+
+    await matchCart.save();
+
+    sendResponse(res, "Delete product form cart by ID successfully!", {
+        cart: matchCart,
+    });
+});
+// @route [PUT] /api/cart/delete-product/
+// @desc delete products from cart
+// @access private
+const deleteProductsFromCart = asyncHandle(async (req, res, next) => {
+    const userId = req.userId;
+    const { productIds = [] } = req.body;
+    console.log(req.body);
+    // simple validate userID
+    if (!userId) {
+        return next(new ErrorResponse("User ID not found", 404));
+    }
+
+    // find cart
+    const matchCart = await Cart.findOne({ user: userId });
+    if (!matchCart) {
+        return next(new ErrorResponse("User not found", 404));
+    }
+
+    // delete products
+    productIds.forEach((element) => {
+        if (matchCart.products.indexOf(element) !== -1) {
+            let index = matchCart.products.indexOf(element);
+
+            matchCart.products.splice(index, 1);
+            matchCart.quantity.splice(index, 1);
+            matchCart.money.splice(index, 1);
+        }
+    });
+    matchCart.sumMoney = matchCart.money.reduce((a, b) => a + b, 0);
+
+    await matchCart.save();
+    sendResponse(res, "Delete products form cart successfully", {
+        cart: matchCart,
+    });
+});
+module.exports = {
+    getCart,
+    addProduct,
+    updateProductInCart,
+    deleteProductFromCartById,
+    deleteProductsFromCart,
+};

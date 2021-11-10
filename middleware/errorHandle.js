@@ -7,6 +7,7 @@ const errHandle = (err, req, res, next) => {
 
     // MongoDB bad ObjectID
     if (err.name === "CastError") {
+        console.log(err);
         const message = `Resource not found with id of ${err.value}`;
         error = new ErrorResponse(message, 404);
     }
