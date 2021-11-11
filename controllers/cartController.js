@@ -21,7 +21,6 @@ const getCart = asyncHandle(async (req, res, next) => {
     if (!matchCart) {
         return next("Cart not found or User is not active", 404);
     }
-    console.log(matchCart.sumMoney);
     // all good
     sendResponse(res, "Get cart successfully", { cart: matchCart });
 });
@@ -33,8 +32,6 @@ const addProduct = asyncHandle(async (req, res, next) => {
     const userId = req.userId;
     const { productId, quantity = 1 } = req.body;
 
-    console.log(11111111111111);
-    console.log(req.body);
     // simple validate userID
     if (!userId) {
         return next(new ErrorResponse("User ID not found", 404));
@@ -51,11 +48,6 @@ const addProduct = asyncHandle(async (req, res, next) => {
         return next(new ErrorResponse("Product not found", 404));
     }
 
-    // check quantity of product
-    if (matchProduct.quantity < quantity) {
-        return next(new ErrorResponse("Product's quantity is not enough", 400));
-    }
-
     // find cart
     const matchCart = await Cart.findOne({ user: userId });
     if (!matchCart) {
@@ -63,21 +55,18 @@ const addProduct = asyncHandle(async (req, res, next) => {
     }
 
     // add product
-    let money =
-        +matchProduct.price - +matchProduct.price * +matchProduct.discount;
-
-    matchCart.products.push(productId);
-    matchCart.quantity.push(quantity);
-    matchCart.money.push(money);
-
-    matchCart.sumMoney =
-        matchCart.sumMoney === 0
-            ? money
-            : matchCart.money.reduce((a, b) => a + b, 0);
+    if (matchCart.products.indexOf(productId) === -1) {
+        matchCart.products.push(productId);
+        matchCart.quantity.push(quantity);
+    } else {
+        matchCart.quantity[matchCart.products.indexOf(productId)] += +quantity;
+    }
 
     await matchCart.save();
+
     sendResponse(res, "Add product successfully", { cart: matchCart });
 });
+
 // @route [PUT] /api/cart/update-product/:productId
 // @desc update product in cart
 // @access private
@@ -109,16 +98,13 @@ const updateProductInCart = asyncHandle(async (req, res, next) => {
     }
 
     matchCart.quantity[matchCart.products.indexOf(productId)] = quantity;
-    matchCart.money[matchCart.products.indexOf(productId)] =
-        quantity * matchProduct.price;
-
-    matchCart.sumMoney = matchCart.money.reduce((a, b) => a + b, 0);
-
     await matchCart.save();
+
     sendResponse(res, "Update product in Cart successfully", {
         cart: matchCart,
     });
 });
+
 // @route [PUT] /api/cart/delete-product/:productId
 // @desc delete product from cart
 // @access private
@@ -152,15 +138,13 @@ const deleteProductFromCartById = asyncHandle(async (req, res, next) => {
 
     matchCart.products.splice(index, 1);
     matchCart.quantity.splice(index, 1);
-    matchCart.money.splice(index, 1);
-    matchCart.sumMoney = matchCart.money.reduce((a, b) => a + b, 0);
-
     await matchCart.save();
 
     sendResponse(res, "Delete product form cart by ID successfully!", {
         cart: matchCart,
     });
 });
+
 // @route [PUT] /api/cart/delete-product/
 // @desc delete products from cart
 // @access private
@@ -186,12 +170,10 @@ const deleteProductsFromCart = asyncHandle(async (req, res, next) => {
 
             matchCart.products.splice(index, 1);
             matchCart.quantity.splice(index, 1);
-            matchCart.money.splice(index, 1);
         }
     });
-    matchCart.sumMoney = matchCart.money.reduce((a, b) => a + b, 0);
-
     await matchCart.save();
+
     sendResponse(res, "Delete products form cart successfully", {
         cart: matchCart,
     });
