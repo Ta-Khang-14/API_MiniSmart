@@ -24,7 +24,7 @@ const getOrders = asyncHandle(async (req, res, next) => {
     if (role === "admin") {
         orders = await Order.find();
     } else if (role === "user") {
-        orders = await Order.findOne({ user: userId });
+        orders = await Order.find({ user: userId });
     }
 
     if (!orders) {

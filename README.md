@@ -47,6 +47,26 @@ Diary - Nhật kí cập nhật sản phẩm
 -   message: Array
 -   isDeleted: Boolean
 
+Cart - Giỏ hàng
+
+-   User: String
+-   products: Array
+-   quantity: Array
+
+Order - Hóa đơn
+
+-   User: String
+-   name: String
+-   email: String
+-   address: String
+-   city: String
+-   district: String
+-   note: String
+-   products: String
+-   quantity: String
+-   sumMoney: Number
+-   status: String
+
 # Auth API
 
 # [POST] api/auth/register/
@@ -205,7 +225,72 @@ Diary - Nhật kí cập nhật sản phẩm
 
 -   Mô tả: Xóa nhiều sản phẩm bằng id
 -   Truy cập: Công khai
--   Nhận dữ liệu: {
-    productIds: []
-    }
+-   Nhận dữ liệu: { productIds: [] }
 -   Quyền: ["admin"]
+
+# Cart API
+
+# [GET] /api/cart/
+
+-   Mô tả: Lấy thông tin giỏ hàng
+-   Truy cập: Cá nhân
+-   Nhận dữ liệu: không
+-   Quyền: ["User"]
+
+# [PUT] /api/cart/add
+
+-   Mô tả: Thêm sản phẩm vào giỏ hàng
+-   Truy cập: Cá nhân
+-   Nhận dữ liệu: { productId, quantity }
+-   Quyền: ["User"]
+
+# [PUT] /api/cart/update-product/:productId
+
+-   Mô tả: Chỉnh sửa số lượng sản phẩm trong giỏ
+-   Truy cập: Cá nhân
+-   Nhận dữ liệu: { quantity }
+-   Quyền: ["User"]
+
+# [PUT] /api/cart/delete-product/:productId
+
+-   Mô tả: Xóa sản phẩm khỏi giỏ hàng
+-   Truy cập: Cá nhân
+-   Nhận dữ liệu: Không
+-   Quyền: ["User"]
+
+# [PUT] /api/cart/delete-product/
+
+-   Mô tả: Xóa nhiều sản phẩm khỏi giỏ hàng
+-   Truy cập: Cá nhân
+-   Nhận dữ liệu: { productIds:[] }
+-   Quyền: ["User"]
+
+# Order API
+
+# [GET] /api/orders/
+
+-   Mô tả: Lấy danh sách hóa đơn
+-   Truy cập: Cá nhân
+-   Nhận dữ liệu: Không
+-   Quyền: ["User", "Admin"]
+
+# [GET] /api/orders/:orderId
+
+-   Mô tả: Lấy thông tin chi tiết hóa đơn theo ID
+-   Truy cập: Cá nhân
+-   Nhận dữ liệu: Không
+-   Quyền: ["User", "Admin"]
+
+# [POST] /api/orders/
+
+-   Mô tả: Tạo hóa đơn
+-   Truy cập: Cá nhân
+-   Nhận dữ liệu: { name, email, address , note ,products, quantity, city, district, sumMoney, status }
+-   Quyền: ["User", "Admin"]
+
+# [PUT] /api/orders/change-status/:orderId
+
+-   Mô tả: Thay đổi trạng thái hóa đơn
+-   Truy cập: Cá nhân
+-   Nhận dữ liệu: { status }
+-   Quyền: ["User", "Admin"]
