@@ -40,6 +40,16 @@ const OrderShema = new Schema(
         district: {
             type: String,
         },
+        sumMoney: {
+            type: Number,
+            required: true,
+            default: 0,
+        },
+        status: {
+            type: String,
+            enum: ["Processing", "Done", "Deleted"],
+            default: "Processing",
+        },
     },
     {
         timestamps: true,

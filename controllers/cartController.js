@@ -17,7 +17,7 @@ const getCart = asyncHandle(async (req, res, next) => {
     }
 
     // Find cart
-    let matchCart = await Cart.findOne({ user: userId });
+    const matchCart = await Cart.findOne({ user: userId });
     if (!matchCart) {
         return next("Cart not found or User is not active", 404);
     }
