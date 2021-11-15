@@ -15,6 +15,7 @@ const {
     forgetPassword,
     resetPassword,
     confirmEmail,
+    getInfor,
 } = require("../controllers/userController");
 
 router.get("/confirm/:id", confirmEmail);
@@ -28,5 +29,6 @@ router.post("/register", register);
 router.post("/login", login);
 
 router.put("/", verifyAcessToken, updateInfor);
+router.get("/", verifyAcessToken, getInfor);
 
 module.exports = router;

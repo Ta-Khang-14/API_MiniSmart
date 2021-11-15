@@ -9,6 +9,7 @@ const jwt = require("jsonwebtoken");
 const redisClient = require("../config/redis");
 const sendResponse = require("../helpers/sendResponse");
 const sendUesrMail = require("../helpers/sendMail");
+const { use } = require("../routes/auth");
 const saltRounds = 10;
 
 // @route [POST] /api/auth/register
@@ -167,6 +168,7 @@ const changePassword = asyncHandle(async (req, res, next) => {
 
     sendResponse(res, "Change password successfully");
 });
+
 // @route [PUT] /api/auth/
 // @desc user update infor
 // @access private
@@ -259,6 +261,7 @@ const forgetPassword = asyncHandle(async (req, res, next) => {
     // sendUesrMail(res, options);
     sendResponse(res, "Send mail successfully", { resetCode });
 });
+
 // @route [POST] /api/auth/reset-password
 // @desc user reset password
 // @access public
@@ -296,6 +299,33 @@ const resetPassword = asyncHandle(async (req, res, next) => {
     //all good
     sendResponse(res, "Reset password successfully");
 });
+
+// @route [GET] /api/auth/
+// @desc get user's information
+// @access private
+const getInfor = asyncHandle(async (req, res, next) => {
+    const userId = req.userId;
+
+    // simple userID
+    if (!userId) {
+        return next(new ErrorResponse("User ID not found", 404));
+    }
+
+    // get infor
+    const user = await User.findById(userId).select([
+        "-password",
+        "-isActive",
+        "-createdAt",
+        "-updatedAt",
+    ]);
+
+    if (!user) {
+        return next(new ErrorResponse("User not found", 404));
+    }
+
+    // all good
+    sendResponse(res, "Get user's information successfully!", { user });
+});
 module.exports = {
     register,
     login,
@@ -305,4 +335,5 @@ module.exports = {
     forgetPassword,
     resetPassword,
     confirmEmail,
+    getInfor,
 };

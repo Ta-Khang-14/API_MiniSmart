@@ -111,6 +111,20 @@ Order - Hóa đơn
 -   Nhận dữ liệu: { resetCode, resetPassword, confirmResetPassword }
 -   Quyền: ['user', 'admin']
 
+# [PUT] /api/auth/
+
+-   Mô tả: Chỉnh sửa thông tin cá nhân
+-   Truy cập: Cá nhân
+-   Nhận dữ liệu: { name, surname, email, phone }
+-   Quyền: ['user', 'admin']
+
+# [GET] /api/auth/
+
+-   Mô tả: Lấy thông tin cá nhân
+-   Truy cập: Cá nhân
+-   Nhận dữ liệu: Không
+-   Quyền: ['user', 'admin']
+
 # Category API
 
 # [POST] api/categories/
