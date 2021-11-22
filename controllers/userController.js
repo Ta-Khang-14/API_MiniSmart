@@ -311,7 +311,7 @@ const getInfor = asyncHandle(async (req, res, next) => {
     }
 
     // get infor
-    const user = await User.find({ _id: userId }).select([
+    const user = await User.findOne({ _id: userId }).select([
         "-password",
         "-isActive",
         "-createdAt",
