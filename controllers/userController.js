@@ -305,14 +305,13 @@ const resetPassword = asyncHandle(async (req, res, next) => {
 // @access private
 const getInfor = asyncHandle(async (req, res, next) => {
     const userId = req.userId;
-
     // simple userID
     if (!userId) {
         return next(new ErrorResponse("User ID not found", 404));
     }
 
     // get infor
-    const user = await User.find(userId).select([
+    const user = await User.find({ _id: userId }).select([
         "-password",
         "-isActive",
         "-createdAt",
