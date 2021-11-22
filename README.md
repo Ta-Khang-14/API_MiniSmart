@@ -315,3 +315,33 @@ Order - Hóa đơn
 -   Truy cập: Cá nhân
 -   Nhận dữ liệu: { status }
 -   Quyền: ["User", "Admin"]
+
+# Address API
+
+# [GET] /api/address/
+
+-   Mô tả: Lấy danh sách địa chỉ
+-   Truy cập: Cá nhân
+-   Nhận dữ liệu: Không
+-   Quyền: ["User"]
+
+# [POST] /api/address/
+
+-   Mô tả: Tạo địa chỉ mới
+-   Truy cập: Cá nhân
+-   Nhận dữ liệu: { name, phone, company, city, district, village}
+-   Quyền: ["User"]
+
+# [PUT] /api/address/:addressId
+
+-   Mô tả: Cập nhật địa chỉ
+-   Truy cập: Cá nhân
+-   Nhận dữ liệu: { name, phone, company, city, district, village}
+-   Quyền: ["User"]
+
+# [DELETE] /api/address/:addressId
+
+-   Mô tả: Xóa địa chỉ
+-   Truy cập: Cá nhân
+-   Nhận dữ liệu: Không
+-   Quyền: ["User"]
