@@ -3,7 +3,6 @@ const Diary = require("../models/Diary");
 const Product = require("../models/Product");
 const ErrorResponse = require("../helpers/ErrorResponse");
 const sendResponse = require("../helpers/sendResponse");
-const { updateInfor } = require("./userController");
 
 // @route [POST] /api/products/
 // @desc create a new product
@@ -11,30 +10,15 @@ const { updateInfor } = require("./userController");
 const createProduct = asyncHandle(async (req, res, next) => {
     const userId = req.userId;
     const pictures = req.pictures;
-    const {
-        title,
-        description,
-        price,
-        discount,
-        quantity,
-        country,
-        unit,
-        category,
-    } = req.body;
+    const { title, description, price, discount, country, unit, category } =
+        req.body;
 
     // validate input
     if (!userId) {
         return next(new ErrorResponse("Id not found", 404));
     }
 
-    if (
-        !title ||
-        !description ||
-        !price ||
-        !quantity ||
-        !country ||
-        !category
-    ) {
+    if (!title || !description || !price || !country || !category) {
         return next(new ErrorResponse("Missing information", 400));
     }
 
@@ -51,7 +35,6 @@ const createProduct = asyncHandle(async (req, res, next) => {
         pictures,
         price,
         discount,
-        quantity,
         country,
         unit,
         postedBy: userId,
@@ -116,7 +99,6 @@ const updateProductById = asyncHandle(async (req, res, next) => {
         price,
         discount,
         pictures,
-        quantity,
         country,
         unit,
         category,
@@ -128,11 +110,11 @@ const updateProductById = asyncHandle(async (req, res, next) => {
         pictures,
         price,
         discount,
-        quantity,
         country,
         unit,
         category,
     };
+
     // check add new pictures
     if (!newPictures) {
         pictures.push(newPictures);

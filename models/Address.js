@@ -25,7 +25,7 @@ const AddressShema = new Schema(
         district: {
             type: String,
         },
-        Village: {
+        village: {
             type: String,
         },
     },

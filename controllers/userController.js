@@ -312,7 +312,7 @@ const getInfor = asyncHandle(async (req, res, next) => {
     }
 
     // get infor
-    const user = await User.findById(userId).select([
+    const user = await User.find(userId).select([
         "-password",
         "-isActive",
         "-createdAt",
@@ -322,7 +322,7 @@ const getInfor = asyncHandle(async (req, res, next) => {
     if (!user) {
         return next(new ErrorResponse("User not found", 404));
     }
-
+    console.log(user);
     // all good
     sendResponse(res, "Get user's information successfully!", { user });
 });

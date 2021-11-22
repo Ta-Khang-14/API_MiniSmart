@@ -7,6 +7,7 @@ const diaryRouter = require("./diary");
 const errHandle = require("../middleware/errorHandle");
 const cartRouter = require("./cart");
 const orderRouter = require("./order");
+const addressRouter = require("./address");
 
 const route = (app) => {
     app.use("/api/auth/", authRouter);
@@ -16,6 +17,7 @@ const route = (app) => {
     app.use("/api/diaries/", diaryRouter);
     app.use("/api/cart/", cartRouter);
     app.use("/api/orders/", orderRouter);
+    app.use("/api/address/", addressRouter);
     app.use("/", homeRouter);
     app.use(errHandle);
 };

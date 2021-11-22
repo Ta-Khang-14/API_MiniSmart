@@ -125,6 +125,13 @@ Order - Hóa đơn
 -   Nhận dữ liệu: Không
 -   Quyền: ['user', 'admin']
 
+# [POST] api/auth/change-password/
+
+-   Mô tả: Người dùng đổi mật khẩu
+-   Truy cập: Cá nhân
+-   Nhận dữ liệu: { password, newPassword, confirmNewPassword }
+-   Quyền: ["admin", "user"]
+
 # Category API
 
 # [POST] api/categories/

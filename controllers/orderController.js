@@ -6,6 +6,7 @@ const { find } = require("../models/Cart");
 const Product = require("../models/Product");
 const Order = require("../models/Order");
 const sendUesrMail = require("../helpers/sendMail");
+const mongoose = require("mongoose");
 
 // @route [GET] /api/orders/
 // @desc get orders
@@ -60,6 +61,11 @@ const getOrderById = asyncHandle(async (req, res, next) => {
 // @desc create order
 // @access private
 const createOrder = asyncHandle(async (req, res, next) => {
+    // const session = await mongoose.startSession();
+    // session.startTransaction();
+    // const options = { session };
+    // console.log(options);
+    // return next(new Error());
     const userId = req.userId;
     const {
         name,
@@ -67,8 +73,8 @@ const createOrder = asyncHandle(async (req, res, next) => {
         address = "",
         note = "",
         products,
-        quantity,
         city,
+        quantity,
         district,
         sumMoney,
         status,
@@ -79,16 +85,17 @@ const createOrder = asyncHandle(async (req, res, next) => {
         !name ||
         !email ||
         !products ||
-        !quantity ||
         !city ||
         !district ||
-        !sumMoney
+        !sumMoney ||
+        !quantity
     ) {
         return next(new ErrorResponse("Missing information", 400));
     }
 
     // create order
     const newOrder = new Order({
+        user: userId,
         name,
         email,
         address,
@@ -103,6 +110,16 @@ const createOrder = asyncHandle(async (req, res, next) => {
 
     await newOrder.save();
 
+    // upload products
+    // const matchProducts = await Product.find({ _id: { $in: products } });
+
+    // let inforProduct = {};
+    // products.forEach((element, index) => {
+    //     let i = matchProducts.indexOf({ _id: element });
+    //     console.log(i);
+    //     inforProduct[element] = quantity[index] + matchProducts[i].quantity;
+    // });
+    // console.log(matchProducts);
     sendResponse(res, "Create order successfully", { order: newOrder });
 });
 
