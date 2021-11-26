@@ -34,8 +34,8 @@ router.delete(
 router.delete("/", verifyAcessToken, checkAdminPermission, deleteProducts);
 router.post(
     "/",
-    // verifyAcessToken,
-    // checkAdminPermission,
+    verifyAcessToken,
+    checkAdminPermission,
     uploadCloud.array("pictures", 10),
     uploadFile,
     createProduct
