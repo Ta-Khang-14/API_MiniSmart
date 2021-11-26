@@ -10,6 +10,7 @@ const sendResponse = require("../helpers/sendResponse");
 const createProduct = asyncHandle(async (req, res, next) => {
     const userId = req.userId;
     const pictures = req.pictures;
+    console.log({ ...req.body });
     const { title, description, price, discount, country, unit, category } =
         req.body;
 
@@ -66,7 +67,6 @@ const getProducts = asyncHandle(async (req, res, next) => {
     if (!products) {
         return next(new ErrorResponse("Products not found", 404));
     }
-
     sendResponse(res, "Get list products successfully", { products });
 });
 // @route [GET] /api/products/:id

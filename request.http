@@ -1,11 +1,6 @@
 ###
-POST https://apiminismart-production.up.railway.app/api/auth/login
+GET http://localhost:3000/api/products/
 Content-Type: application/json
-
-{
-    "email": "vietkhang04@gmail.com",
-    "password": "112233"
-}
 
 ###
 GET http://localhost:3000/api/auth/
