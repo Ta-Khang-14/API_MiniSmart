@@ -226,7 +226,7 @@ const deleteProductById = asyncHandle(async (req, res, next) => {
 const deleteProducts = asyncHandle(async (req, res, next) => {
     const userId = req.userId;
     const { productIds } = req.body;
-    console.log(productIds);
+    console.log("productIds: " + productIds);
 
     //check userid
     if (!userId) {
@@ -252,6 +252,7 @@ const deleteProducts = asyncHandle(async (req, res, next) => {
         },
         { isDeleted: true }
     );
+    console.log("matchDiaries: " + matchDiaries);
     if (!matchDiaries) {
         return next("Diaries not found", 404);
     }
