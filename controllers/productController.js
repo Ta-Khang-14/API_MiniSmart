@@ -67,6 +67,17 @@ const getProducts = asyncHandle(async (req, res, next) => {
     if (!products) {
         return next(new ErrorResponse("Products not found", 404));
     }
+
+    // let tao = await Product.find({
+    //     $text: {
+    //         $search: "Cà chua",
+    //     },
+    //     price: {
+    //         $gt: 5000,
+    //     },
+    // });
+    // console.log(tao);
+    console.log(req.query);
     sendResponse(res, "Get list products successfully", { products });
 });
 // @route [GET] /api/products/:id
@@ -215,6 +226,7 @@ const deleteProductById = asyncHandle(async (req, res, next) => {
 const deleteProducts = asyncHandle(async (req, res, next) => {
     const userId = req.userId;
     const { productIds } = req.body;
+    console.log(productIds);
 
     //check userid
     if (!userId) {
@@ -228,7 +240,7 @@ const deleteProducts = asyncHandle(async (req, res, next) => {
 
     // delete product
     const result = await Product.deleteMany({ _id: { $in: productIds } });
-    console.log(result);
+
     if (!result) {
         return next("Products not found", 404);
     }
