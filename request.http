@@ -1,5 +1,5 @@
 ###
-GET http://localhost:3000/api/products/?sort=["delete", ["-view"]]
+GET http://localhost:3000/api/products/?search=Cà chua
 Content-Type: application/json
 
 ###

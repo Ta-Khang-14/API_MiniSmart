@@ -62,23 +62,14 @@ const createProduct = asyncHandle(async (req, res, next) => {
 // @desc get list products
 // @access public
 const getProducts = asyncHandle(async (req, res, next) => {
-    const products = await Product.find();
-
-    if (!products) {
+    if (!res.advancedResults.data) {
         return next(new ErrorResponse("Products not found", 404));
     }
 
-    // let tao = await Product.find({
-    //     $text: {
-    //         $search: "Cà chua",
-    //     },
-    //     price: {
-    //         $gt: 5000,
-    //     },
-    // });
-    // console.log(tao);
-    console.log(req.query);
-    sendResponse(res, "Get list products successfully", { products });
+    sendResponse(res, "Get list products successfully", {
+        products: res.advancedResults.data,
+        pagination: res.advancedResults.pagination,
+    });
 });
 // @route [GET] /api/products/:id
 // @desc get product by id
@@ -227,6 +218,7 @@ const deleteProducts = asyncHandle(async (req, res, next) => {
     const userId = req.userId;
     const { productIds } = req.body;
     console.log("productIds: " + productIds);
+    console.log(req.body);
 
     //check userid
     if (!userId) {
@@ -235,12 +227,12 @@ const deleteProducts = asyncHandle(async (req, res, next) => {
 
     //check prduct id
     if (!productIds) {
-        return next("Product Ids not found", 404);
+        return next("Missing information", 400);
     }
 
     // delete product
     const result = await Product.deleteMany({ _id: { $in: productIds } });
-
+    console.log(result + "1111");
     if (!result) {
         return next("Products not found", 404);
     }

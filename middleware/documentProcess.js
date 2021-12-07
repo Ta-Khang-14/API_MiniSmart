@@ -1,4 +1,3 @@
-const { models } = require("mongoose");
 const asyncHandle = require("./asynHandle");
 
 const queryResults = (model) =>
@@ -6,6 +5,7 @@ const queryResults = (model) =>
         let query;
 
         const reqQuery = { ...req.query };
+        console.log(req.query);
         const removeFields = ["sort", "page", "limit"];
 
         removeFields.forEach((key) => delete reqQuery[key]);
@@ -20,24 +20,51 @@ const queryResults = (model) =>
         const conditions = JSON.parse(queryStr);
 
         if (req.query.search) {
+            console.log("Search");
             conditions.$text = { $search: req.query.search };
         }
 
+        console.log("Find");
         query = model.find({ conditions });
 
         if (req.query.sort) {
-            const sortBy = { ...req.query.sort };
-            query.sort(sortBy);
+            console.log("Sort-1");
+            const sortBy = req.query.sort.split(",").join(" ");
+            query = query.sort(sortBy);
         } else {
-            query.sort("-createdAt");
+            console.log("Sort-2");
+            query = query.sort("-createdAt");
         }
 
         const page = parseInt(req.query.page, 10) || 1;
-        const limit = parseInt(req.query.limit, 10) || 4;
+        const limit = parseInt(req.query.limit, 10) || 5;
         const startIndex = (page - 1) * limit;
-        const endIndex = page * limit - 1;
+        const endIndex = page * limit;
         const total = await model.countDocuments(conditions);
 
-        const paginations = {};
+        console.log("Skip");
+        query = query.skip(startIndex).limit(limit);
+
         const queryResults = await query;
+        const pagination = {};
+
+        if (endIndex < total) {
+            pagination["next"] = page + 1;
+        }
+
+        if (startIndex > 0) {
+            pagination["prev"] = page - 1;
+        }
+
+        pagination["limit"] = limit;
+        pagination["total"] = total;
+        console.log("End");
+        res.advancedResults = {
+            data: queryResults,
+            pagination,
+        };
+
+        next();
     });
+
+module.exports = queryResults;

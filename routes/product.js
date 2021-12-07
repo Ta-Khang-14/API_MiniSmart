@@ -11,11 +11,14 @@ const {
     deleteProducts,
 } = require("../controllers/productController");
 const { verifyAcessToken } = require("../middleware/verifyToken");
+const queryResults = require("../middleware/documentProcess");
 
 const multer = require("multer");
 const storage = require("../helpers/cloudinaryStorage");
 const uploadCloud = multer({ storage: storage("Product") });
+
 const uploadFile = require("../middleware/uploadFile");
+const Product = require("../models/Product");
 
 router.put(
     "/:id",
@@ -41,6 +44,6 @@ router.post(
     createProduct
 );
 router.get("/:id", getProductById);
-router.get("/", getProducts);
+router.get("/", queryResults(Product), getProducts);
 
 module.exports = router;

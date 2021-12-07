@@ -55,7 +55,7 @@ Cart - Giỏ hàng
 
 Order - Hóa đơn
 
--   User: String
+-   user: userID
 -   name: String
 -   email: String
 -   address: String
@@ -66,6 +66,16 @@ Order - Hóa đơn
 -   quantity: String
 -   sumMoney: Number
 -   status: String
+
+Address
+
+-   user: userID
+-   name: String
+-   phone: String
+-   company: String
+-   city: String
+-   district: String
+-   village: String
 
 # Auth API
 
@@ -197,7 +207,6 @@ Order - Hóa đơn
     pictures,
     price,
     discount,
-    quantity,
     country,
     unit,
     category,
@@ -214,19 +223,24 @@ Order - Hóa đơn
     pictures,
     price,
     discount,
-    quantity,
     country,
     unit,
     category,
     }
 -   Quyền: ["admin"]
 
-# [GET] api/products/
+# [GET] api/products/?sort&page&limit&field
 
 -   Mô tả: Lấy danh sách sản phẩm
 -   Truy cập: Công khai
 -   Nhận dữ liệu: Không
 -   Quyền: Tất cả
+
+-   limit: Number (Số sản phẩm 1 trang. Mặc đinh = 5)
+-   page: Number (Trang hiện tại. Mặc định = 1)
+-   sort: String (Sắp xếp bản ghi. Nhận field cần sắp xếp, ví dụ: sort=name -price.)
+-   field: Object (Lọc theo điều kiện field cụ thể. Ví dụ: price[gt] = 10000)
+-   Thuộc tính của field: [gt,gte,lt,lte,eq] = ["lớn hơn", "lớn hơn bằng", "nhỏ hơn", "nhỏ hơn bằng", "bằng"]
 
 # [GET] api/products/:id
 
@@ -306,7 +320,7 @@ Order - Hóa đơn
 
 -   Mô tả: Tạo hóa đơn
 -   Truy cập: Cá nhân
--   Nhận dữ liệu: { name, email, address , note ,products, quantity, city, district, sumMoney, status }
+-   Nhận dữ liệu: { name, email, address , note ,products, city, district, sumMoney, status }
 -   Quyền: ["User", "Admin"]
 
 # [PUT] /api/orders/change-status/:orderId
