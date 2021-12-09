@@ -1,5 +1,5 @@
 ###
-GET http://localhost:3000/api/products/?search=Cà chua
+GET http://localhost:3000/api/products/?price[gte]=600000&page=1
 Content-Type: application/json
 
 ###

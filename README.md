@@ -229,7 +229,7 @@ Address
     }
 -   Quyền: ["admin"]
 
-# [GET] api/products/?sort&page&limit&field
+# [GET] api/products/?sort&page&limit&field&search
 
 -   Mô tả: Lấy danh sách sản phẩm
 -   Truy cập: Công khai
@@ -241,6 +241,7 @@ Address
 -   sort: String (Sắp xếp bản ghi. Nhận field cần sắp xếp, ví dụ: sort=name -price.)
 -   field: Object (Lọc theo điều kiện field cụ thể. Ví dụ: price[gt] = 10000)
 -   Thuộc tính của field: [gt,gte,lt,lte,eq] = ["lớn hơn", "lớn hơn bằng", "nhỏ hơn", "nhỏ hơn bằng", "bằng"]
+-   search: String (Tìm sản phẩm theo giá trị. VD: search=Táo)
 
 # [GET] api/products/:id
 

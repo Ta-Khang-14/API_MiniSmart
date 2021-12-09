@@ -17,7 +17,7 @@ const queryResults = (model) =>
             (match) => "$" + match
         );
 
-        const conditions = JSON.parse(queryStr);
+        const conditions = { ...JSON.parse(queryStr) };
 
         if (req.query.search) {
             console.log("Search");
@@ -25,7 +25,7 @@ const queryResults = (model) =>
         }
 
         console.log("Find");
-        query = model.find({ conditions });
+        query = model.find(conditions);
 
         if (req.query.sort) {
             console.log("Sort-1");

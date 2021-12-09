@@ -19,7 +19,6 @@ const uploadCloud = multer({ storage: storage("Product") });
 
 const uploadFile = require("../middleware/uploadFile");
 const Product = require("../models/Product");
-
 router.put(
     "/:id",
     verifyAcessToken,

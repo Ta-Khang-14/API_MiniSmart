@@ -10,22 +10,30 @@ const sendResponse = require("../helpers/sendResponse");
 const createProduct = asyncHandle(async (req, res, next) => {
     const userId = req.userId;
     const pictures = req.pictures;
-    console.log({ ...req.body });
     const { title, description, price, discount, country, unit, category } =
         req.body;
 
+    // get pictures name
+    const pictureNames = [];
+    pictures.forEach((item) => {
+        pictureNames.push(item.split("/").pop());
+    });
+    console.log(pictureNames);
     // validate input
     if (!userId) {
+        req.destroy = pictureNames;
         return next(new ErrorResponse("Id not found", 404));
     }
 
     if (!title || !description || !price || !country || !category) {
+        req.destroy = pictureNames;
         return next(new ErrorResponse("Missing information", 400));
     }
 
     // check title
     const oldProduct = await Product.findOne({ title });
     if (oldProduct) {
+        req.destroy = pictureNames;
         return next(new ErrorResponse("Title has taken", 400));
     }
 
@@ -33,16 +41,16 @@ const createProduct = asyncHandle(async (req, res, next) => {
     const newProduct = new Product({
         title,
         description,
-        pictures,
         price,
         discount,
+        pictures,
         country,
         unit,
         postedBy: userId,
         category,
     });
-    await newProduct.save();
 
+    await newProduct.save();
     // create new diary
     const newDiary = new Diary({
         productId: newProduct._id,
