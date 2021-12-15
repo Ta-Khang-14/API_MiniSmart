@@ -14,11 +14,11 @@ const createProduct = asyncHandle(async (req, res, next) => {
         req.body;
 
     // get pictures name
-    // const pictureNames = [];
-    // pictures.forEach((item) => {
-    //     pictureNames.push(item.split("/").pop());
-    // });
-    // console.log(pictureNames);
+    const pictureNames = [];
+    pictures.forEach((item) => {
+        pictureNames.push(item.split("/").pop());
+    });
+    console.log(pictureNames);
     // validate input
     if (!userId) {
         req.destroy = pictureNames;
