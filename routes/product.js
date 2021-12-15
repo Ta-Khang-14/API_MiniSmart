@@ -24,7 +24,7 @@ router.put(
     verifyAcessToken,
     checkAdminPermission,
     uploadCloud.array("pictures", 10),
-    uploadFile,
+    uploadFile("newPictures"),
     updateProductById
 );
 router.delete(
@@ -39,7 +39,7 @@ router.post(
     verifyAcessToken,
     checkAdminPermission,
     uploadCloud.array("pictures", 10),
-    uploadFile,
+    uploadFile("pictures"),
     createProduct
 );
 router.get("/:id", getProductById);

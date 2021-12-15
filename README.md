@@ -226,6 +226,7 @@ Address
     country,
     unit,
     category,
+    newPictures
     }
 -   Quyền: ["admin"]
 

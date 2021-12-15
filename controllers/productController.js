@@ -102,7 +102,7 @@ const getProductById = asyncHandle(async (req, res, next) => {
 const updateProductById = asyncHandle(async (req, res, next) => {
     const userId = req.userId;
     const productId = req.params.id;
-    const newPictures = req.pictures;
+    const newPictures = req.newPictures;
     const {
         title,
         description,
@@ -134,6 +134,7 @@ const updateProductById = asyncHandle(async (req, res, next) => {
     Object.keys(updateInfor).forEach((key) => {
         if (!updateInfor[key]) delete updateInfor[key];
     });
+
     if (updateInfor["title"]) {
         const findProduct = await Product.findOne({
             title,
