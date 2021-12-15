@@ -6,7 +6,7 @@ const uploadFile = (name) => (req, res, next) => {
         return next();
     } else {
         const arrayUrl = req.files.map((item) => item.path);
-        req.name = [...arrayUrl];
+        req[name] = [...arrayUrl];
         next();
     }
 };
