@@ -23,7 +23,7 @@ router.put(
     "/:id",
     verifyAcessToken,
     checkAdminPermission,
-    uploadCloud.array("pictures", 10),
+    uploadCloud.array("newPictures", 10),
     uploadFile("newPictures"),
     updateProductById
 );
