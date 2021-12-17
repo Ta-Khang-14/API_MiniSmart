@@ -103,7 +103,7 @@ const updateProductById = asyncHandle(async (req, res, next) => {
     const userId = req.userId;
     const productId = req.params.id;
     const newPictures = req.newPictures;
-    const {
+    let {
         title,
         description,
         price,
@@ -116,6 +116,11 @@ const updateProductById = asyncHandle(async (req, res, next) => {
 
     pictures = JSON.parse(pictures);
 
+    // check add new pictures
+    if (newPictures) {
+        pictures = pictures.concat(newPictures);
+    }
+
     const updateInfor = {
         title,
         description,
@@ -126,11 +131,6 @@ const updateProductById = asyncHandle(async (req, res, next) => {
         unit,
         category,
     };
-
-    // check add new pictures
-    if (!newPictures) {
-        pictures.push(newPictures);
-    }
 
     // validate update information
     Object.keys(updateInfor).forEach((key) => {

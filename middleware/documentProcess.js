@@ -5,7 +5,6 @@ const queryResults = (model) =>
         let query;
 
         const reqQuery = { ...req.query };
-        console.log(req.query);
         const removeFields = ["sort", "page", "limit"];
 
         removeFields.forEach((key) => delete reqQuery[key]);
@@ -20,19 +19,15 @@ const queryResults = (model) =>
         const conditions = { ...JSON.parse(queryStr) };
 
         if (req.query.search) {
-            console.log("Search");
             conditions.$text = { $search: req.query.search };
         }
 
-        console.log("Find");
         query = model.find(conditions);
 
         if (req.query.sort) {
-            console.log("Sort-1");
             const sortBy = req.query.sort.split(",").join(" ");
             query = query.sort(sortBy);
         } else {
-            console.log("Sort-2");
             query = query.sort("-createdAt");
         }
 
@@ -42,7 +37,6 @@ const queryResults = (model) =>
         const endIndex = page * limit;
         const total = await model.countDocuments(conditions);
 
-        console.log("Skip");
         query = query.skip(startIndex).limit(limit);
 
         const queryResults = await query;
@@ -58,7 +52,6 @@ const queryResults = (model) =>
 
         pagination["limit"] = limit;
         pagination["total"] = total;
-        console.log("End");
         res.advancedResults = {
             data: queryResults,
             pagination,
