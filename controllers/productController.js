@@ -114,6 +114,8 @@ const updateProductById = asyncHandle(async (req, res, next) => {
         category,
     } = req.body;
 
+    pictures = JSON.parse(pictures);
+
     const updateInfor = {
         title,
         description,
