@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-
 const { checkAdminPermission } = require("../middleware/checkPermission");
 const {
     createProduct,

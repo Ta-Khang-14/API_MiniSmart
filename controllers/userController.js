@@ -42,15 +42,14 @@ const register = asyncHandle(async (req, res, next) => {
     });
     await newUser.save();
 
-    // // send mail
-    // const options = {
-    //     email,
-    //     subject: "Kích hoạt tài khoản!",
-    //     message: "Kích vào đường link sau để kích hoạt tài khoản của bạn: ",
-    //     link: process.env.CLIENT_URL + "/api/auth/confirm/" + newUser._id,
-    // };
-    // sendUesrMail(res, options);
-    sendResponse(res, "Send active mail successfully", { user: newUser });
+    // send mail
+    const options = {
+        email,
+        subject: "Kích hoạt tài khoản!",
+        message: "Kích vào đường link sau để kích hoạt tài khoản của bạn: ",
+        link: process.env.CLIENT_URL + "/api/auth/confirm/" + newUser._id,
+    };
+    sendUesrMail(res, options, { message: "Send active mail successfully" });
 });
 // @route [POST] /api/auth/login
 // @desc user login
@@ -252,14 +251,16 @@ const forgetPassword = asyncHandle(async (req, res, next) => {
     const resetCode = generateResetCode(matchUser._id, next);
 
     // all good
-    // const options = {
-    //     email,
-    //     subject: "Quên mật khẩu",
-    //     message: `Mã của bạn: ${resetCode}. Mã tồn tại trong 15 phút.`,
-    // };
+    const options = {
+        email,
+        subject: "Quên mật khẩu",
+        message: `Mã của bạn: ${resetCode}. Mã tồn tại trong 15 phút.`,
+    };
 
-    // sendUesrMail(res, options);
-    sendResponse(res, "Send mail successfully", { resetCode });
+    sendUesrMail(res, options, {
+        message: "Send reset code successfully",
+        resetCode,
+    });
 });
 
 // @route [POST] /api/auth/reset-password
