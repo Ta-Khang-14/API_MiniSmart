@@ -259,7 +259,6 @@ const forgetPassword = asyncHandle(async (req, res, next) => {
 
     sendUesrMail(res, options, {
         message: "Send reset code successfully",
-        resetCode,
     });
 });
 

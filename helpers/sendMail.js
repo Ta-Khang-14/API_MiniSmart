@@ -22,7 +22,7 @@ const sendUesrMail = async (res, options, data) => {
         oauth2Client.setCredentials({
             refresh_token: GG_CLIENT_REFESH_TOKEN,
         });
-        const accessToken = oauth2Client.getAccessToken();
+        const accessToken = await oauth2Client.getAccessToken();
 
         let { email, subject, message, link } = options;
         link = link || "";
@@ -48,7 +48,7 @@ const sendUesrMail = async (res, options, data) => {
 
         await transporter.sendMail(content);
 
-        sendResponse(res, data.message, { resetCode: data.resetCode });
+        sendResponse(res, data.message);
     } catch (err) {
         return res.status(500).json({
             message: err.message,
