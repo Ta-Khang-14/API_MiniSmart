@@ -17,7 +17,7 @@ const getCart = asyncHandle(async (req, res, next) => {
     }
 
     // Find cart
-    const matchCart = await Cart.findOne({ user: userId });
+    const matchCart = await Cart.findOne({ user: userId }).populate("products");
     if (!matchCart) {
         return next("Cart not found or User is not active", 404);
     }
@@ -49,7 +49,7 @@ const addProduct = asyncHandle(async (req, res, next) => {
     }
 
     // find cart
-    const matchCart = await Cart.findOne({ user: userId });
+    const matchCart = await Cart.findOne({ user: userId }).populate("products");
     if (!matchCart) {
         return next(new ErrorResponse("User not found", 404));
     }
@@ -92,7 +92,7 @@ const updateProductInCart = asyncHandle(async (req, res, next) => {
     }
 
     // find cart
-    const matchCart = await Cart.findOne({ user: userId });
+    const matchCart = await Cart.findOne({ user: userId }).populate("products");
     if (!matchCart) {
         return next(new ErrorResponse("User not found", 404));
     }
@@ -129,7 +129,7 @@ const deleteProductFromCartById = asyncHandle(async (req, res, next) => {
     }
 
     // find cart
-    const matchCart = await Cart.findOne({ user: userId });
+    const matchCart = await Cart.findOne({ user: userId }).populate("products");
     if (!matchCart) {
         return next(new ErrorResponse("User not found", 404));
     }
@@ -158,7 +158,7 @@ const deleteProductsFromCart = asyncHandle(async (req, res, next) => {
     }
 
     // find cart
-    const matchCart = await Cart.findOne({ user: userId });
+    const matchCart = await Cart.findOne({ user: userId }).populate("products");
     if (!matchCart) {
         return next(new ErrorResponse("User not found", 404));
     }
