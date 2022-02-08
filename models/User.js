@@ -7,12 +7,11 @@ const UserSchema = new Schema(
         name: {
             type: String,
             required: true,
-            match: /^[a-zA-Z]{2,}$/,
+            match: /^[a-zA-Z0-9_ ]{2,}$/,
             trim: true,
         },
         surname: {
             type: String,
-            required: true,
             match: /^[a-zA-Z]{2,}$/,
             trim: true,
         },

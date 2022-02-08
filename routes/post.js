@@ -10,11 +10,23 @@ const {
     deletePostById,
 } = require("../controllers/postController");
 
+const multer = require("multer");
+const storage = require("../helpers/cloudinaryStorage");
+const uploadCloud = multer({ storage: storage("Product") });
+const uploadFile = require("../middleware/uploadFile");
+
 router.put("/:id", verifyAcessToken, checkAdminPermission, updatePostById);
 router.delete("/:id", verifyAcessToken, checkAdminPermission, deletePostById);
 router.get("/:id", getPostById);
 
-router.post("/", verifyAcessToken, checkAdminPermission, createPost);
+router.post(
+    "/",
+    verifyAcessToken,
+    checkAdminPermission,
+    uploadCloud.array("pictures", 10),
+    uploadFile("pictures"),
+    createPost
+);
 router.get("/", getPosts);
 
 module.exports = router;

@@ -2,7 +2,10 @@ const ErrorResponse = require("../helpers/ErrorResponse");
 
 const errHandle = (err, req, res, next) => {
     console.log(`Error Handle: ${err.message}`);
+    console.log(err);
     let error = { ...err };
+
+    error.code = err.code || null;
     error.message = err.message;
 
     // MongoDB bad ObjectID
@@ -26,6 +29,7 @@ const errHandle = (err, req, res, next) => {
     return res.status(error.statusCode || 500).json({
         success: false,
         message: error.message || "Internal server error",
+        error_code: error.code || "Unknown code error",
     });
 };
 module.exports = errHandle;

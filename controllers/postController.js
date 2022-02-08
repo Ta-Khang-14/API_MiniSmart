@@ -7,8 +7,9 @@ const Post = require("../models/Post");
 // @desc create new post
 // @access private
 const createPost = asyncHandle(async (req, res, next) => {
-    const { title, description, pictures } = req.body;
+    const { title, description } = req.body;
     const userId = req.userId;
+    const pictures = req.pictures;
 
     // simple validate
     if (!title || !description || !userId) {

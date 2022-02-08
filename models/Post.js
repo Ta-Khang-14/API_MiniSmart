@@ -12,7 +12,7 @@ const PostSchema = new Schema(
             type: String,
             required: true,
         },
-        prictures: [
+        pictures: [
             {
                 type: String,
             },

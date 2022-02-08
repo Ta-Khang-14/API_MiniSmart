@@ -8,13 +8,13 @@ const {
     GG_CLIENT_ID,
     GG_CLIENT_SECRET,
     GG_CLIENT_REFESH_TOKEN,
-    GG_REDIRECT_URL,
+    GG_REDIRECT_URL2,
 } = process.env;
 
 const oauth2Client = new OAuth2(
     GG_CLIENT_ID,
     GG_CLIENT_SECRET,
-    GG_REDIRECT_URL
+    GG_REDIRECT_URL2
 );
 
 const sendUesrMail = async (res, options, data) => {
