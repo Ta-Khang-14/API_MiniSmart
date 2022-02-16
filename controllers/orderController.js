@@ -136,7 +136,15 @@ const changeStatusOrder = asyncHandle(async (req, res, next) => {
     }
 
     // simple validate userID
-    if (!["Processing", "Done", "Deleted"].includes(status)) {
+    if (
+        ![
+            "Processing",
+            "Done",
+            "Deleted",
+            "Chờ xác nhận",
+            "Chờ lấy hàng",
+        ].includes(status)
+    ) {
         return next(new ErrorResponse("Invalid status", 404));
     }
 
