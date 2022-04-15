@@ -47,13 +47,7 @@ const OrderShema = new Schema(
         },
         status: {
             type: String,
-            enum: [
-                "Processing",
-                "Done",
-                "Deleted",
-                "Chờ xác nhận",
-                "Chờ lấy hàng",
-            ],
+            enum: ["Chờ xác nhận", "Chờ lấy hàng", "Đã thanh toán"],
             default: "Chờ xác nhận",
         },
     },

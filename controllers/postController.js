@@ -74,15 +74,23 @@ const getPostById = asyncHandle(async (req, res, next) => {
 // @desc update posts by id
 // @access private
 const updatePostById = asyncHandle(async (req, res, next) => {
-    const { title, description, pictures } = req.body;
+    let { title, description, pictures } = req.body;
+    const newPictures = req.newPictures;
+    const id = req.params.id;
+    console.log(req.body);
+    pictures = JSON.parse(pictures);
+
+    if (newPictures) {
+        pictures = pictures.concat(newPictures);
+    }
+
+    // validate update info
     const updateInformation = {
         title,
         description,
         pictures,
     };
-    const id = req.params.id;
 
-    // validate update info
     Object.keys(updateInformation).forEach((key) => {
         if (!updateInformation[key]) delete updateInformation[key];
     });

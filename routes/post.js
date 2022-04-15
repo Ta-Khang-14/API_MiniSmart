@@ -15,7 +15,14 @@ const storage = require("../helpers/cloudinaryStorage");
 const uploadCloud = multer({ storage: storage("Product") });
 const uploadFile = require("../middleware/uploadFile");
 
-router.put("/:id", verifyAcessToken, checkAdminPermission, updatePostById);
+router.put(
+    "/:id",
+    verifyAcessToken,
+    checkAdminPermission,
+    uploadCloud.array("newPictures", 10),
+    uploadFile("newPictures"),
+    updatePostById
+);
 router.delete("/:id", verifyAcessToken, checkAdminPermission, deletePostById);
 router.get("/:id", getPostById);
 

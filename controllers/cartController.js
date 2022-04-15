@@ -49,21 +49,25 @@ const addProduct = asyncHandle(async (req, res, next) => {
     }
 
     // find cart
-    const matchCart = await Cart.findOne({ user: userId }).populate("products");
+    let matchCart = await Cart.findOne({ user: userId });
     if (!matchCart) {
         return next(new ErrorResponse("User not found", 404));
     }
-
+    // get list product id
+    let listProductIds = matchCart.products.map((item) =>
+        item._id.toHexString()
+    );
     // add product
-    if (matchCart.products.indexOf(productId) === -1) {
+    if (listProductIds.indexOf(productId) === -1) {
         matchCart.products.push(productId);
         matchCart.quantity.push(quantity);
     } else {
-        matchCart.quantity[matchCart.products.indexOf(productId)] += +quantity;
+        matchCart.quantity[listProductIds.indexOf(productId)] += +quantity;
     }
 
     await matchCart.save();
-
+    matchCart = await matchCart.populate("products");
+    //await matchCart;
     sendResponse(res, "Add product successfully", { cart: matchCart });
 });
 
@@ -97,7 +101,12 @@ const updateProductInCart = asyncHandle(async (req, res, next) => {
         return next(new ErrorResponse("User not found", 404));
     }
 
-    matchCart.quantity[matchCart.products.indexOf(productId)] = quantity;
+    // get list product id
+    let listProductIds = matchCart.products.map((item) =>
+        item._id.toHexString()
+    );
+
+    matchCart.quantity[listProductIds.indexOf(productId)] = quantity;
     await matchCart.save();
 
     sendResponse(res, "Update product in Cart successfully", {
@@ -134,7 +143,11 @@ const deleteProductFromCartById = asyncHandle(async (req, res, next) => {
         return next(new ErrorResponse("User not found", 404));
     }
 
-    let index = matchCart.products.indexOf(productId);
+    // get list product id
+    let listProductIds = matchCart.products.map((item) =>
+        item._id.toHexString()
+    );
+    let index = listProductIds.indexOf(productId);
 
     matchCart.products.splice(index, 1);
     matchCart.quantity.splice(index, 1);
@@ -150,8 +163,8 @@ const deleteProductFromCartById = asyncHandle(async (req, res, next) => {
 // @access private
 const deleteProductsFromCart = asyncHandle(async (req, res, next) => {
     const userId = req.userId;
-    const { productIds = [] } = req.body;
-    console.log(req.body);
+    let { productIds = [] } = req.body;
+    productIds = JSON.parse(productIds);
     // simple validate userID
     if (!userId) {
         return next(new ErrorResponse("User ID not found", 404));
@@ -164,14 +177,19 @@ const deleteProductsFromCart = asyncHandle(async (req, res, next) => {
     }
 
     // delete products
-    productIds.forEach((element) => {
-        if (matchCart.products.indexOf(element) !== -1) {
-            let index = matchCart.products.indexOf(element);
+    let listProductIds = matchCart.products.map((item) =>
+        item._id.toHexString()
+    );
 
+    for (let i = 0; i < productIds.length; i++) {
+        let index = listProductIds.indexOf(productIds[i]);
+        while (index !== -1) {
             matchCart.products.splice(index, 1);
             matchCart.quantity.splice(index, 1);
+            listProductIds.splice(index, 1);
+            index = listProductIds.indexOf(productIds[i]);
         }
-    });
+    }
     await matchCart.save();
 
     sendResponse(res, "Delete products form cart successfully", {
