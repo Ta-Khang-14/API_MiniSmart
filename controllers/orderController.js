@@ -61,13 +61,8 @@ const getOrderById = asyncHandle(async (req, res, next) => {
 // @desc create order
 // @access private
 const createOrder = asyncHandle(async (req, res, next) => {
-    // const session = await mongoose.startSession();
-    // session.startTransaction();
-    // const options = { session };
-    // console.log(options);
-    // return next(new Error());
     const userId = req.userId;
-    const {
+    let {
         name,
         email,
         address = "",
@@ -92,7 +87,14 @@ const createOrder = asyncHandle(async (req, res, next) => {
     ) {
         return next(new ErrorResponse("Missing information", 400));
     }
-
+    //format products id and quantity
+    if (typeof products == "string") {
+        products = JSON.parse(products);
+    }
+    if (typeof quantity == "string") {
+        quantity = JSON.parse(quantity);
+    }
+    console.log(products, quantity);
     // create order
     const newOrder = new Order({
         user: userId,
@@ -111,15 +113,19 @@ const createOrder = asyncHandle(async (req, res, next) => {
     await newOrder.save();
 
     // upload products
-    // const matchProducts = await Product.find({ _id: { $in: products } });
+    const matchProducts = await Product.find({ _id: { $in: products } });
 
-    // let inforProduct = {};
-    // products.forEach((element, index) => {
-    //     let i = matchProducts.indexOf({ _id: element });
-    //     console.log(i);
-    //     inforProduct[element] = quantity[index] + matchProducts[i].quantity;
-    // });
-    // console.log(matchProducts);
+    // get list product id
+    let listProducts = matchProducts.map((value) => value._id.toHexString());
+
+    await Promise.all(
+        products.map((value, index) => {
+            let i = listProducts.indexOf(value._id.toHexString());
+            matchProducts[i].sellNumber += +quantity[index];
+            return matchProducts[i].save();
+        })
+    );
+
     sendResponse(res, "Create order successfully", { order: newOrder });
 });
 

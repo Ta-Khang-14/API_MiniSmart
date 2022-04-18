@@ -38,7 +38,7 @@ const UserSchema = new Schema(
         isActive: {
             type: Boolean,
             enum: [true, false],
-            default: false,
+            default: true,
         },
         favoriteProducts: [
             {
