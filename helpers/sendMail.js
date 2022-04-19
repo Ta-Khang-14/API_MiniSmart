@@ -10,8 +10,6 @@ const sendUesrMail = async (res, options, data) => {
 
         const transporter = nodemailer.createTransport({
             service: "Gmail",
-            host: MAIL_HOST,
-            port: MAIL_PORT,
             auth: {
                 user: EMAIL_NAME,
                 pass: PASS_USER,
