@@ -29,6 +29,7 @@ const sendUesrMail = async (res, options, data) => {
 
         sendResponse(res, data.message);
     } catch (err) {
+        console.log(err);
         return res.status(500).json({
             message: err.message,
             success: false,
