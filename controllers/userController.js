@@ -45,7 +45,6 @@ const register = asyncHandle(async (req, res, next) => {
     // send mail
     const options = {
         email,
-        subject: "Kích hoạt tài khoản!",
         message: "Kích vào đường link sau để kích hoạt tài khoản của bạn: ",
         link: process.env.CLIENT_URL + "/api/auth/confirm/" + newUser._id,
     };
