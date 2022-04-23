@@ -22,7 +22,7 @@ const register = asyncHandle(async (req, res, next) => {
     if (!name || !surname || !email || !password) {
         return next(new ErrorResponse("Missing information", 400));
     }
-
+    console.log(1);
     //Check email exist
     let matchUser = await User.findOne({ email });
     if (matchUser) {
@@ -31,7 +31,7 @@ const register = asyncHandle(async (req, res, next) => {
 
     // hash password
     const hashPassword = await bcrypt.hash(password, saltRounds);
-
+    console.log(2);
     // create new user
     const newUser = new User({
         name,
@@ -41,7 +41,7 @@ const register = asyncHandle(async (req, res, next) => {
         password: hashPassword,
     });
     await newUser.save();
-
+    console.log(3);
     // send mail
     const options = {
         email,

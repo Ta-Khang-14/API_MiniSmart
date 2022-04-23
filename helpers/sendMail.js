@@ -3,7 +3,7 @@ const nodemailer = require("nodemailer");
 const { CourierClient } = require("@trycourier/courier");
 const sendResponse = require("./sendResponse");
 
-const { EMAIL_NAME, AUTH_TOKEN, EVENT_ID } = process.env;
+const { EMAIL_NAME, PASS_USER, AUTH_TOKEN, EVENT_ID } = process.env;
 
 const sendUesrMail = async (res, options, data) => {
     try {
@@ -29,6 +29,7 @@ const sendUesrMail = async (res, options, data) => {
 
         sendResponse(res, data.message);
     } catch (err) {
+        console.log(err);
         return res.status(500).json({
             message: err.message,
             success: false,
