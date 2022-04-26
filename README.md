@@ -306,7 +306,7 @@ Address
 
 # [GET] /api/orders/
 
--   Mô tả: Lấy danh sách hóa đơn
+-   Mô tả: Lấy danh sách hóa đơn. Với
 -   Truy cập: Cá nhân
 -   Nhận dữ liệu: Không
 -   Quyền: ["User", "Admin"]

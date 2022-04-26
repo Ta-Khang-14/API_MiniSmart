@@ -23,9 +23,9 @@ const getOrders = asyncHandle(async (req, res, next) => {
     // get order
     let orders;
     if (role === "admin") {
-        orders = await Order.find();
+        orders = await Order.find().populate("products");
     } else if (role === "user") {
-        orders = await Order.find({ user: userId });
+        orders = await Order.find({ user: userId }).populate("products");
     }
 
     if (!orders) {
@@ -48,7 +48,7 @@ const getOrderById = asyncHandle(async (req, res, next) => {
     }
 
     // get order
-    let order = await Order.findById({ _id: orderId });
+    let order = await Order.findById({ _id: orderId }).populate("products");
 
     if (!order) {
         return next(new ErrorResponse("Order not found", 404));
@@ -94,9 +94,9 @@ const createOrder = asyncHandle(async (req, res, next) => {
     if (typeof quantity == "string") {
         quantity = JSON.parse(quantity);
     }
-    console.log(products, quantity);
+
     // create order
-    const newOrder = new Order({
+    let newOrder = new Order({
         user: userId,
         name,
         email,
@@ -111,6 +111,7 @@ const createOrder = asyncHandle(async (req, res, next) => {
     });
 
     await newOrder.save();
+    newOrder = await newOrder.populate("products");
 
     // upload products
     const matchProducts = await Product.find({ _id: { $in: products } });
