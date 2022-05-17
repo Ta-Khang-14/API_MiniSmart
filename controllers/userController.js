@@ -52,6 +52,7 @@ const register = asyncHandle(async (req, res, next) => {
     // };
     // sendUesrMail(res, options,  "Send active mail successfully" );
 
+    // Hidden send mail
     sendResponse(res, "Register successfully!");
 });
 // @route [POST] /api/auth/login
