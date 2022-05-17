@@ -41,15 +41,17 @@ const register = asyncHandle(async (req, res, next) => {
         password: hashPassword,
     });
     await newUser.save();
-    console.log(3);
+
     // send mail
-    const options = {
-        email,
-        subject: "Kích hoạt tài khoản!",
-        message: "Kích vào đường link sau để kích hoạt tài khoản của bạn: ",
-        link: process.env.CLIENT_URL + "/api/auth/confirm/" + newUser._id,
-    };
-    sendUesrMail(res, options, { message: "Send active mail successfully" });
+    // const options = {
+    //     email,
+    //     subject: "Kích hoạt tài khoản!",
+    //     message: "Kích vào đường link sau để kích hoạt tài khoản của bạn: ",
+    //     link: process.env.CLIENT_URL + "/api/auth/confirm/" + newUser._id,
+    // };
+    // sendUesrMail(res, options,  "Send active mail successfully" );
+
+    sendResponse(res, "Register successfully!");
 });
 // @route [POST] /api/auth/login
 // @desc user login

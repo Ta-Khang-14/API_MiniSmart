@@ -95,6 +95,9 @@ const createOrder = asyncHandle(async (req, res, next) => {
         quantity = JSON.parse(quantity);
     }
 
+    if (products.length != quantity.length) {
+        return next(new ErrorResponse("Invalid input data", 400));
+    }
     // create order
     let newOrder = new Order({
         user: userId,
