@@ -38,6 +38,7 @@ const register = asyncHandle(async (req, res, next) => {
         surname,
         phone,
         email,
+        isActive: true,
         password: hashPassword,
     });
     await newUser.save();
