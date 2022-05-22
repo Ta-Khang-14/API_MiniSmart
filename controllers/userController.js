@@ -43,6 +43,11 @@ const register = asyncHandle(async (req, res, next) => {
     });
     await newUser.save();
 
+    const newCart = new Cart({
+        user: newUser._id,
+    });
+    await newCart.save();
+
     // send mail
     // const options = {
     //     email,
@@ -120,11 +125,10 @@ const confirmEmail = asyncHandle(async (req, res, next) => {
 
     // all good
     matchUer.isActive = true;
-    const newCart = new Cart({
-        user: matchUer._id,
-    });
-    await matchUer.save();
-    await newCart.save();
+    // const newCart = new Cart({
+    //     user: matchUer._id,
+    // });
+    // await matchUer.save();
 
     sendResponse(res, "Active account successfully");
 });
