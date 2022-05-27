@@ -15,6 +15,7 @@ const getDiaries = asyncHandle(async (req, res, next) => {
 
     sendResponse(res, "Get diaries successfully", { diaries });
 });
+
 // @route [GET] /api/diaries/:id
 // @desc get diary by Id
 // @access private
@@ -32,6 +33,7 @@ const getDiaryById = asyncHandle(async (req, res, next) => {
 
     sendResponse(res, "Get diary by id successfully", { diary: matchDiary });
 });
+
 // @route [GET] /api/diaries/product/:id
 // @desc get diary by product id
 // @access private

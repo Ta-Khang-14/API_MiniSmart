@@ -49,16 +49,16 @@ const register = asyncHandle(async (req, res, next) => {
     await newCart.save();
 
     // send mail
-    // const options = {
-    //     email,
-    //     subject: "Kích hoạt tài khoản!",
-    //     message: "Kích vào đường link sau để kích hoạt tài khoản của bạn: ",
-    //     link: process.env.CLIENT_URL + "/api/auth/confirm/" + newUser._id,
-    // };
-    // sendUesrMail(res, options,  "Send active mail successfully" );
+    const options = {
+        email,
+        subject: "Kích hoạt tài khoản!",
+        message: "Kích vào đường link sau để kích hoạt tài khoản của bạn: ",
+        link: process.env.CLIENT_URL + "/api/auth/confirm/" + newUser._id,
+    };
+    sendUesrMail(res, options, "Send active mail successfully");
 
     // Hidden send mail
-    sendResponse(res, "Register successfully!");
+    // sendResponse(res, "Register successfully!");
 });
 // @route [POST] /api/auth/login
 // @desc user login
