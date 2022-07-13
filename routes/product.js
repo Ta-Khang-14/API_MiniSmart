@@ -8,6 +8,7 @@ const {
     updateProductById,
     deleteProductById,
     deleteProducts,
+    getProductByCategoryId,
 } = require("../controllers/productController");
 const { verifyAcessToken } = require("../middleware/verifyToken");
 const queryResults = require("../middleware/documentProcess");
@@ -42,6 +43,7 @@ router.post(
     createProduct
 );
 router.get("/:id", getProductById);
+router.get("/category/:id", getProductByCategoryId);
 router.get("/", queryResults(Product), getProducts);
 
 module.exports = router;

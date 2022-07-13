@@ -1,6 +1,7 @@
 const asyncHandle = require("../middleware/asynHandle");
 const Diary = require("../models/Diary");
 const Product = require("../models/Product");
+const Category = require("../models/Category");
 const ErrorResponse = require("../helpers/ErrorResponse");
 const sendResponse = require("../helpers/sendResponse");
 
@@ -78,6 +79,21 @@ const getProducts = asyncHandle(async (req, res, next) => {
         products: res.advancedResults.data,
         pagination: res.advancedResults.pagination,
     });
+});
+// @route [GET] /api/products/category/:id
+// @desc get product by category id
+// @access public
+const getProductByCategoryId = asyncHandle(async (req, res, next) => {
+    const categoryId = req.params.id;
+    const category = await Category.findById(categoryId);
+
+    if (!category) {
+        return next(new ErrorResponse("Category ID not found", 404));
+    }
+
+    const products = await Product.find({ category: categoryId });
+
+    sendResponse(res, "Get products by category id successfully", { products });
 });
 // @route [GET] /api/products/:id
 // @desc get product by id
@@ -268,4 +284,5 @@ module.exports = {
     updateProductById,
     deleteProductById,
     deleteProducts,
+    getProductByCategoryId,
 };

@@ -65,7 +65,7 @@ Order - Hóa đơn
 -   products: String
 -   quantity: String
 -   sumMoney: Number
--   status: String
+-   status: String ["Chờ xác nhận", "Chờ lấy hàng", "Đã thanh toán"]
 
 Address
 
@@ -247,6 +247,13 @@ Address
 # [GET] api/products/:id
 
 -   Mô tả: Lấy thông tin 1 sản phẩm bằng id
+-   Truy cập: Công khai
+-   Nhận dữ liệu: Không
+-   Quyền: Tất cả
+
+# [GET] api/products/category/:id
+
+-   Mô tả: Lấy thông tin 1 sản phẩm bằng id category
 -   Truy cập: Công khai
 -   Nhận dữ liệu: Không
 -   Quyền: Tất cả
