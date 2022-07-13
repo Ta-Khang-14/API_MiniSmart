@@ -91,7 +91,10 @@ const getProductByCategoryId = asyncHandle(async (req, res, next) => {
         return next(new ErrorResponse("Category ID not found", 404));
     }
 
-    const products = await Product.find({ category: categoryId });
+    const products = await Product.find({
+        category: categoryId,
+        isDeleted: false,
+    });
 
     sendResponse(res, "Get products by category id successfully", { products });
 });
@@ -107,6 +110,10 @@ const getProductById = asyncHandle(async (req, res, next) => {
     const product = await Product.findById(productId);
 
     if (!product) {
+        return next(new ErrorResponse("Product not found", 404));
+    }
+
+    if (!product.isDeleted) {
         return next(new ErrorResponse("Product not found", 404));
     }
 
@@ -222,7 +229,10 @@ const deleteProductById = asyncHandle(async (req, res, next) => {
     }
 
     // delete product
-    const result = await Product.deleteOne({ _id: productId });
+    const result = await Product.updateOne(
+        { _id: productId },
+        { isDeleted: true }
+    );
     if (!result) {
         return next("Product not found", 404);
     }
@@ -258,7 +268,10 @@ const deleteProducts = asyncHandle(async (req, res, next) => {
     }
 
     // delete product
-    const result = await Product.deleteMany({ _id: { $in: productIds } });
+    const result = await Product.updateMany(
+        { _id: { $in: productIds } },
+        { isDeleted: true }
+    );
     console.log(result + "1111");
     if (!result) {
         return next("Products not found", 404);

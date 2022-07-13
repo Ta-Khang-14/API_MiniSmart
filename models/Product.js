@@ -53,6 +53,10 @@ const ProductScheme = new Schema(
             type: Schema.Types.ObjectId,
             ref: "categories",
         },
+        isDeleted: {
+            type: Boolean,
+            default: false,
+        },
     },
     {
         timestamps: true,

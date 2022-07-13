@@ -16,7 +16,8 @@ const queryResults = (model) =>
             (match) => "$" + match
         );
 
-        const conditions = { ...JSON.parse(queryStr) };
+        let conditions = { ...JSON.parse(queryStr) };
+        conditions = { ...conditions, isDeleted: false };
 
         if (req.query.search) {
             conditions.$text = { $search: req.query.search };

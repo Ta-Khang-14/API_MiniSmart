@@ -43,7 +43,11 @@ const addProduct = asyncHandle(async (req, res, next) => {
     }
 
     // find product
-    const matchProduct = await Product.findById(productId);
+    const matchProduct = await Product.findOne({
+        _id: productId,
+        isDeleted: false,
+    });
+
     if (!matchProduct) {
         return next(new ErrorResponse("Product not found", 404));
     }
