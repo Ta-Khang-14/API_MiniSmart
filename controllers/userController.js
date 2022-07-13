@@ -38,7 +38,7 @@ const register = asyncHandle(async (req, res, next) => {
         surname,
         phone,
         email,
-        isActive: true,
+        isActive: false,
         password: hashPassword,
     });
     await newUser.save();
