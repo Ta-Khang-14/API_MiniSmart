@@ -128,7 +128,7 @@ const confirmEmail = asyncHandle(async (req, res, next) => {
     // const newCart = new Cart({
     //     user: matchUer._id,
     // });
-    // await matchUer.save();
+    await matchUer.save();
 
     sendResponse(res, "Active account successfully");
 });
