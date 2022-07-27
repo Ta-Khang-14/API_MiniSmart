@@ -79,7 +79,12 @@ const login = asyncHandle(async (req, res, next) => {
 
     // check active account
     if (!matchUser.isActive) {
-        return next(new ErrorResponse("User not active", 400));
+        return next(
+            new ErrorResponse(
+                "User is not activated or User has been banned",
+                400
+            )
+        );
     }
 
     // check password

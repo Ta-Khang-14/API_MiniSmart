@@ -8,6 +8,7 @@ const errHandle = require("../middleware/errorHandle");
 const cartRouter = require("./cart");
 const orderRouter = require("./order");
 const addressRouter = require("./address");
+const adminRouter = require("./admin");
 
 const route = (app) => {
     app.use("/api/auth/", authRouter);
@@ -18,6 +19,7 @@ const route = (app) => {
     app.use("/api/cart/", cartRouter);
     app.use("/api/orders/", orderRouter);
     app.use("/api/address/", addressRouter);
+    app.use("/api/admin/", adminRouter);
     app.use("/", homeRouter);
     app.use(errHandle);
 };

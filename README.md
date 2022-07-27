@@ -368,3 +368,33 @@ Address
 -   Truy cập: Cá nhân
 -   Nhận dữ liệu: Không
 -   Quyền: ["User"]
+
+# Admin API
+
+# [GET] /api/admin/user
+
+-   Mô tả: Lấy danh sách User
+-   Truy cập: Cá nhân
+-   Nhận dữ liệu: Không
+-   Quyền: ["Admin"]
+
+# [DELETE] /api/admin/user/delete/:id
+
+-   Mô tả: Khóa tài khoản User by Id
+-   Truy cập: Cá nhân
+-   Nhận dữ liệu: Không
+-   Quyền: ["Admin"]
+
+# [DELETE] /api/admin/user/delete/
+
+-   Mô tả: Khóa tài khoản Users
+-   Truy cập: Cá nhân
+-   Nhận dữ liệu: { userIds }
+-   Quyền: ["Admin"]
+
+# [PUT] /api/admin/user/activated/:id
+
+-   Mô tả: Khóa tài khoản Users
+-   Truy cập: Cá nhân
+-   Nhận dữ liệu: Không
+-   Quyền: ["Admin"]

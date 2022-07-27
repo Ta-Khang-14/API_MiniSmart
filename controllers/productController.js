@@ -175,6 +175,7 @@ const updateProductById = asyncHandle(async (req, res, next) => {
             return next(new ErrorResponse("Title has taken", 400));
         }
     }
+
     // validate user id
     if (!userId) {
         return next(new ErrorResponse("User Id not found", 404));
