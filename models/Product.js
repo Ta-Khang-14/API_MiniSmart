@@ -65,6 +65,5 @@ const ProductScheme = new Schema(
 
 ProductScheme.index({
     title: "text",
-    country: "text",
 });
 module.exports = mongoose.model("products", ProductScheme);

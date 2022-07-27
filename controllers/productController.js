@@ -103,17 +103,23 @@ const getProductByCategoryId = asyncHandle(async (req, res, next) => {
 // @access public
 const getProductById = asyncHandle(async (req, res, next) => {
     const productId = req.params.id;
+    console.log(productId);
 
     if (!productId) {
         return next(new ErrorResponse("Product ID not found", 404));
     }
-    const product = await Product.findById(productId);
+    const product = await Product.findOne({
+        _id: productId,
+        isDeleted: false,
+    }).exec();
+
+    console.log(product);
 
     if (!product) {
         return next(new ErrorResponse("Product not found", 404));
     }
 
-    if (!product.isDeleted) {
+    if (product.isDeleted) {
         return next(new ErrorResponse("Product not found", 404));
     }
 
