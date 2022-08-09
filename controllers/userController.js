@@ -22,7 +22,6 @@ const register = asyncHandle(async (req, res, next) => {
     if (!name || !surname || !email || !password) {
         return next(new ErrorResponse("Missing information", 400));
     }
-    console.log(1);
     //Check email exist
     let matchUser = await User.findOne({ email });
     if (matchUser) {
@@ -31,7 +30,6 @@ const register = asyncHandle(async (req, res, next) => {
 
     // hash password
     const hashPassword = await bcrypt.hash(password, saltRounds);
-    console.log(2);
     // create new user
     const newUser = new User({
         name,
@@ -135,7 +133,8 @@ const confirmEmail = asyncHandle(async (req, res, next) => {
     // });
     await matchUer.save();
 
-    sendResponse(res, "Active account successfully");
+    res.redirect("https://minimart-demo.netlify.app/");
+    // sendResponse(res, "Active account successfully");
 });
 // @route [PUT] /api/auth/change-password
 // @desc user change password
