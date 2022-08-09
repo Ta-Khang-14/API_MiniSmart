@@ -27,7 +27,7 @@ const sendUesrMail = async (res, options, data) => {
         let { email, subject, message, link } = options;
         link = link || "";
 
-        const transporter = nodemailer.createTransport({
+        const transporter = await nodemailer.createTransport({
             service: "Gmail",
             auth: {
                 type: "OAuth2",
@@ -49,7 +49,7 @@ const sendUesrMail = async (res, options, data) => {
 
         await transporter.sendMail(content);
 
-        sendResponse(res, data.message);
+        sendResponse(res, data);
     } catch (err) {
         console.log(err);
         return res.status(500).json({
